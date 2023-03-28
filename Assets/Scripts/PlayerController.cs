@@ -5,12 +5,25 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    public Dictionary<PlayerStatesEnum, PlayerStates> states = new Dictionary<PlayerStatesEnum, PlayerStates>() { { PlayerStatesEnum.PlayerGrounded, new PlayerGrounded() }, { PlayerStatesEnum.PlayerJumping, new PlayerJumping() } };
-    PlayerStates currentState;
+    public Dictionary<PlayerStatesEnum, PlayerStates> states ;
+    private PlayerStates currentState;
     private PlayerStatesEnum currentStateEnum;
+    [SerializeField]private Animator animationController;
+    [SerializeField]private ParticleSystem particleSystem;
+    private Transform tr;
+    private Rigidbody2D rb;
 
 
 
+
+    private void Awake()
+    {
+        
+        states=new Dictionary<PlayerStatesEnum, PlayerStates>() { { PlayerStatesEnum.PlayerGrounded, new PlayerGrounded(this) }, { PlayerStatesEnum.PlayerJumping, new PlayerJumping(this) } };
+        tr=transform;
+        rb=this.GetComponent<Rigidbody2D>();
+        
+    }
     private void Start()
     {
         ChangeState(PlayerStatesEnum.PlayerGrounded);
@@ -20,16 +33,31 @@ public class PlayerController : MonoBehaviour
     {
         currentState?.Tick();
     }
+    void FixedUpdate(){
+        currentState?.FixedTick();
+    }
 
-    private void ChangeState(PlayerStatesEnum stateToGo)
+    public void ChangeState(PlayerStatesEnum stateToGo)
     {
         currentState?.OnEnd();
         currentStateEnum=stateToGo;
         currentState = states[stateToGo];
         currentState.OnBegin();
     }
+    public void StartParticleSystem(bool oneShot=false){
+        particleSystem.loop=oneShot;
+        if(!particleSystem.isPlaying) 
+            particleSystem.Play();
+    }
+    public void StopParticleSystem(){
+        if(particleSystem.isPlaying) 
+            particleSystem.Stop();
+    }
 
 
     ///Propertys
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
+    public Transform Tr { get => tr;  }
+    public Animator AnimationController { get => animationController; }
+    public Rigidbody2D Rb { get => rb; }
 }
