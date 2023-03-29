@@ -44,7 +44,7 @@ public class PlayerJumping : PlayerStates
     private int jumpForce=4;
     private float jumpingTime;
     int numberOfJumps;
-
+    int groundLayer=LayerMask.GetMask("Ground");
     public PlayerJumping(PlayerController controller) : base(controller)
     {
     }
@@ -77,7 +77,8 @@ public class PlayerJumping : PlayerStates
         jumpingTime += Time.deltaTime;
         if(Input.GetKeyDown(KeyCode.W))DoubleJump();
         if (jumpingTime <= 0.3f) return;// No ground Check needed
-        RaycastHit2D hit = Physics2D.Raycast((base.controller.Tr.position - Vector3.up * 0.5f), -base.controller.Tr.up);
+        RaycastHit2D hit = Physics2D.Raycast((base.controller.PlayerFeet.position), -base.controller.Tr.up,10,groundLayer);
+        Debug.DrawRay((base.controller.PlayerFeet.position), -base.controller.Tr.up,Color.blue,1);
         if (hit)
         {
             if (hit.distance <= 0)
@@ -127,7 +128,7 @@ public class PlayerGrounded : PlayerStates
         {
             base.controller.AnimationController.SetBool(runningAnimHash, true);
 
-            base.controller.Tr.localScale = new Vector3(movementAmount / Mathf.Abs(movementAmount), 1, 1);
+            
             base.controller.StartParticleSystem();
         }
         else
@@ -135,7 +136,16 @@ public class PlayerGrounded : PlayerStates
             base.controller.AnimationController.SetBool(runningAnimHash, false);
             base.controller.StopParticleSystem();
         }
-        if (Input.GetKeyDown(KeyCode.W)) base.controller.ChangeState(PlayerStatesEnum.PlayerJumping);
+        if(Input.anyKey) ProcessInput(movementAmount);
+       
+
+    }
+    private void ProcessInput(float movementAmount){
+         if (Input.GetKeyDown(KeyCode.W)) base.controller.ChangeState(PlayerStatesEnum.PlayerJumping);
+         if(movementAmount!=0){
+            base.controller.SwitchPlayerDirection(movementAmount>0);
+         }
+        
     }
 
     public override string ToString()

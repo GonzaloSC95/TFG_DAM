@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private PlayerStatesEnum currentStateEnum;
     [SerializeField]private Animator animationController;
     [SerializeField]private ParticleSystem particleSystem;
+    [SerializeField] Transform playerFeet;
     private Transform tr;
     private Rigidbody2D rb;
 
@@ -54,10 +55,16 @@ public class PlayerController : MonoBehaviour
             particleSystem.Stop();
     }
 
+    public void SwitchPlayerDirection(bool right){
+        GameManager.instance.CameraControllerInstance.offsetDirection=right?0.5f:-0.5f;
+        tr.localScale = new Vector3(right?1:-1, 1, 1);
+    }
+
 
     ///Propertys
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
     public Transform Tr { get => tr;  }
     public Animator AnimationController { get => animationController; }
     public Rigidbody2D Rb { get => rb; }
+    public Transform PlayerFeet { get => playerFeet;  }
 }
