@@ -2,7 +2,7 @@
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,
-    "**/.gitignore": true,
+    "**/.gitignore": false,
     "**/.gitmodules": true,
     "**/*.booproj": true,
     "**/*.pidb": true,
@@ -50,6 +50,13 @@
     "Obj/": true,
     "ProjectSettings/": true,
     "temp/": true,
-    "Temp/": true
+    "Temp/": true,
+    "**/*.sln": true,
+    "**/*.csproj": true,
+    "**/*.vsconfig": true,
+    "UserSettings/": true,
+    "Logs/": true,
+    "Packages/": true,
+    "**/*.gitattributes": true
   }
 }
