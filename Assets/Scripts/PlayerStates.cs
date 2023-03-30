@@ -84,15 +84,15 @@ public class PlayerJumping : PlayerStates
             if (hit.distance <= 0)
             {
                 base.controller.ChangeState(PlayerStatesEnum.PlayerGrounded);
-                 base.controller.AnimationController.SetTrigger(groundedHash);
+                base.controller.AnimationController.SetTrigger(groundedHash);
             }
         }
 
     }
     private void DoubleJump(){
         if(numberOfJumps>2) return;
-         base.controller.Rb.velocity=Vector2.zero;
-         base.controller.AnimationController.SetTrigger(jumpHash);
+        base.controller.Rb.velocity=Vector2.zero;
+        base.controller.AnimationController.SetTrigger(jumpHash);
         numberOfJumps++;
         base.controller.Rb.AddForce(Vector2.up * (jumpForce), ForceMode2D.Impulse);
         
