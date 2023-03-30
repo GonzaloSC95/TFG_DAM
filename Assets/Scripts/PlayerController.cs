@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+    /* Atributos */
     public Dictionary<PlayerStatesEnum, PlayerStates> states ;
     private PlayerStates currentState;
     private PlayerStatesEnum currentStateEnum;
@@ -15,8 +16,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
 
-
-
+    /* Métodos */
+    /* 1º Metodo que se ejecuta */
     private void Awake()
     {
         
@@ -25,19 +26,21 @@ public class PlayerController : MonoBehaviour
         rb=this.GetComponent<Rigidbody2D>();
         
     }
+    /* 2º Metodo que se ejecuta */
     private void Start()
     {
         ChangeState(PlayerStatesEnum.PlayerGrounded);
     }
-
+    /* Metodo de actualización */
     void Update()
     {
         currentState?.Tick();
     }
+    /* Metodo de actualización */
     void FixedUpdate(){
         currentState?.FixedTick();
     }
-
+    /* Metodo de cambio de estado */
     public void ChangeState(PlayerStatesEnum stateToGo)
     {
         currentState?.OnEnd();
@@ -45,23 +48,25 @@ public class PlayerController : MonoBehaviour
         currentState = states[stateToGo];
         currentState.OnBegin();
     }
+    /* Metodo para iniciar el sistema de particulas */
     public void StartParticleSystem(bool oneShot=false){
         particleSystem.loop=oneShot;
         if(!particleSystem.isPlaying) 
             particleSystem.Play();
     }
+    /* Metodo para parar el sistema de particulas */
     public void StopParticleSystem(){
         if(particleSystem.isPlaying) 
             particleSystem.Stop();
     }
-
+    /* Metodo para parar el sistema de particulas */
     public void SwitchPlayerDirection(bool right){
         GameManager.instance.CameraControllerInstance.offsetDirection=right?0.5f:-0.5f;
         tr.localScale = new Vector3(right?1:-1, 1, 1);
     }
 
 
-    ///Propertys
+    /* Propertys */
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
     public Transform Tr { get => tr;  }
     public Animator AnimationController { get => animationController; }
