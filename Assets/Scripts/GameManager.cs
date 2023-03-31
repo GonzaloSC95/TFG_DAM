@@ -1,10 +1,10 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private CameraController cameraControllerInstance;
-
+    [SerializeField]private List<Enemy> enemies;
 
 
     private void Awake()
@@ -29,4 +29,12 @@ public class GameManager : MonoBehaviour
             else cameraControllerInstance = value;
         }
     }
+
+    public void SubscribeEnemy(Enemy enemy){
+        enemies.Add(enemy);
+    }
+    public void UnsuscribeEnemy(Enemy enemy){
+        enemies.Remove(enemy);
+    }
+
 }
