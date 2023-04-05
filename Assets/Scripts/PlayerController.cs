@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         currentState = states[stateToGo];
         currentState.OnBegin();
     }
-    /* Método ChangeState */
+    /* Método StartParticleSystem */
     public void StartParticleSystem(bool oneShot = false)
     {
         particleSystem.loop = oneShot;
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
     /* Método SwitchPlayerDirection */
     public void SwitchPlayerDirection(bool right)
     {
-        GameManager.instance.CameraControllerInstance.offsetDirection = right?0.5f:-0.5f;
+        GameManager.instance.CameraControllerInstance.offsetDirection = right?0.2f:-0.2f; 
         tr.localScale = new Vector3((right?1:-1), 1, 1);
         directionRight = right;
     }
