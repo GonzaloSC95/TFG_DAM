@@ -6,6 +6,7 @@ using UnityEngine;
 /* Enumeracion PlayerStatesEnum */
 public enum PlayerStatesEnum
 {
+    //Estados del player
     PlayerJumping,
     PlayerGrounded
 }
@@ -13,18 +14,22 @@ public enum PlayerStatesEnum
 /* Clase  PlayerStates*/
 public abstract class PlayerStates
 {
+    /* Atributos */
     protected PlayerController controller;
 
+    /* Constructor */
     protected PlayerStates(PlayerController controller)
     {
         this.controller = controller;
     }
 
+    /* Métodos */
+    /* Método Tick */
     public virtual void Tick()
     {
+        //Movimiento horizontal
         float movementAmount = Input.GetAxis("Horizontal");
-        controller.Tr.position +=
-            Vector3.right * (movementAmount * Time.deltaTime);
+        controller.Tr.position += Vector3.right * (movementAmount * Time.deltaTime);
     }
 
     public virtual void OnBegin()
@@ -44,68 +49,67 @@ public abstract class PlayerStates
 public class PlayerJumping : PlayerStates
 {
     /* Atributos */
+    //Hashes para las animaciones
     public int groundedHash = Animator.StringToHash("Grounded");
-
     public int jumpHash = Animator.StringToHash("Jump");
-
+    //Fuerza de salto
     private int jumpForce = 4;
-
+    //Tiempo de salto
     private float jumpingTime;
-
+    //Numero de saltos
     public int numberOfJumps;
-
+    //Capa de suelo
     public int groundLayer = LayerMask.GetMask("Ground");
 
-    /* Salto */
-    public PlayerJumping(PlayerController controller) :
-        base(controller)
+    //Constructor
+    public PlayerJumping(PlayerController controller) : base(controller)
     {
     }
 
-    /* FixedTick */
+    //Métodos
+    /* Método FixedTick */
     public override void FixedTick()
     {
+        //Movimiento vertical
         base.FixedTick();
-        float movementAmount =
-            Mathf.Clamp(Input.GetAxis("Vertical") * 20, int.MinValue, 0);
+        float movementAmount = Mathf.Clamp(Input.GetAxis("Vertical") * 20, int.MinValue, 0);
         base.controller.Rb.AddForce(Vector2.up * (movementAmount));
     }
 
-    /* OnBegin */
+    /* Método OnBegin */
     public override void OnBegin()
     {
+        //Reiniciamos el numero de saltos
         numberOfJumps = 0;
         jumpingTime = 0;
         DoubleJump();
     }
 
-    /* OnEnd */
+    /* Método OnEnd */
     public override void OnEnd()
     {
         base.OnEnd();
     }
 
-    /* Tick */
+    /* Método Tick */
     public override void Tick()
     {
+        //Comprobamos si el jugador esta en el suelo
         base.Tick();
         jumpingTime += Time.deltaTime;
+        //Si el jugador pulsa la tecla W, saltamos
         if (Input.GetKeyDown(KeyCode.W)) DoubleJump();
-        if (jumpingTime <= 0.3f) return; // No ground Check needed
-        RaycastHit2D hit =
-            Physics2D
-                .Raycast((base.controller.PlayerFeet.position),
-                -base.controller.Tr.up,
-                10,
-                groundLayer);
-        Debug
-            .DrawRay((base.controller.PlayerFeet.position),
-            -base.controller.Tr.up,
-            Color.blue,
-            1);
+        // Si el tiempo de salto es inferior o igual a 0.2f, el código no se ejecutará 
+        //Esto sirve para que el jugador no pueda saltar infinitamente
+        if (jumpingTime <= 0.2f) return;
+        //Raycast para comprobar si el jugador esta en el suelo
+        RaycastHit2D hit = Physics2D.Raycast((base.controller.PlayerFeet.position), -base.controller.Tr.up, 10, groundLayer);
+        //Debug
+        Debug.DrawRay((base.controller.PlayerFeet.position),-base.controller.Tr.up,Color.blue,1);
+        //Si el raycast ha colisionado con el suelo, cambiamos el estado a PlayerGrounded
         if (hit)
         {
-            if (hit.distance <= 0)
+            if (hit.distance <= 1) //0 es un valor demasiado bajo para detectar la colision
             {
                 base.controller.ChangeState(PlayerStatesEnum.PlayerGrounded);
                 base.controller.AnimationController.SetTrigger(groundedHash);
@@ -113,19 +117,22 @@ public class PlayerJumping : PlayerStates
         }
     }
 
-    /* DoubleJump */
+    /* Método DoubleJump */
     private void DoubleJump()
     {
+        //Si el numero de saltos es mayor que 2, el código no se ejecutará
         if (numberOfJumps > 2) return;
+        
         base.controller.Rb.velocity = Vector2.zero;
+        //Animacion de salto
         base.controller.AnimationController.SetTrigger(jumpHash);
+        //Aumentamos el numero de saltos
         numberOfJumps++;
-        base.controller
-            .Rb
-            .AddForce(Vector2.up * (jumpForce), ForceMode2D.Impulse);
+        //Se ejecuta el salto
+        base.controller.Rb.AddForce(Vector2.up * (jumpForce), ForceMode2D.Impulse);
     }
 
-    /* ToString */
+    /* Método ToString */
     public override string ToString()
     {
         return base.ToString();
@@ -138,55 +145,62 @@ public class PlayerGrounded : PlayerStates
     /* Atributos */
     int runningAnimHash = Animator.StringToHash("Running");
 
-    /* PlayerGrounded */
-    public PlayerGrounded(PlayerController controller) :
-        base(controller)
+    /* Constructor */
+    public PlayerGrounded(PlayerController controller) : base(controller)
     {
     }
 
-    /* OnBegin */
+    /* Métodos */
+    /* Método OnBegin */
     public override void OnBegin()
     {
         base.OnBegin();
     }
 
-    /* OnEnd */
+    /* Método OnEnd */
     public override void OnEnd()
     {
         base.OnEnd();
     }
 
-    /* Tick */
+    /* Método Tick */
     public override void Tick()
     {
+        //Movimiento horizontal
         base.Tick();
         float movementAmount = Input.GetAxis("Horizontal");
+        //Si el jugador se mueve horizontamente se inicia la animacion de correr junto con el sistema de particulas
         if (movementAmount != 0)
         {
             base.controller.AnimationController.SetBool(runningAnimHash, true);
 
             base.controller.StartParticleSystem();
         }
-        else
+        else //Si el jugador no se mueve, se detiene la animacion de correr junto con el sistema de particulas
         {
             base.controller.AnimationController.SetBool(runningAnimHash, false);
             base.controller.StopParticleSystem();
         }
+        
         if (Input.anyKey) ProcessInput(movementAmount);
     }
 
-    /* ProcessInput */
+    /* Método ProcessInput */
     private void ProcessInput(float movementAmount)
     {
+        //Si el jugador pulsa la tecla W, cambiamos el estado a PlayerJumping
         if (Input.GetKeyDown(KeyCode.W))
+        {
             base.controller.ChangeState(PlayerStatesEnum.PlayerJumping);
+        }
+        //Si el jugador pulsa la tecla A o D, cambiamos la direccion del jugador   
         if (movementAmount != 0)
         {
             base.controller.SwitchPlayerDirection(movementAmount > 0);
         }
     }
 
-    /* ToString */
+    /* Método ToString */
     public override string ToString()
     {
         return base.ToString();

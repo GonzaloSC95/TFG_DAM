@@ -22,58 +22,81 @@ public class PlayerController : MonoBehaviour
     float invulTime=2;
     int life=3;
 
+    /* Propertys */
+    public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
+    public Transform Tr { get => tr; }
+    public Animator AnimationController { get => animationController; }
+    public Rigidbody2D Rb { get => rb; }
+    public Transform PlayerFeet { get => playerFeet; }
+
     /* Métodos */
-    /* 1º Metodo que se ejecuta */
+    /* Método Awake*/
     private void Awake()
     {
-        
-        states=new Dictionary<PlayerStatesEnum, PlayerStates>() { { PlayerStatesEnum.PlayerGrounded, new PlayerGrounded(this) }, { PlayerStatesEnum.PlayerJumping, new PlayerJumping(this) } };
-        tr=transform;
-        rb=this.GetComponent<Rigidbody2D>();
-        rend=this.GetComponent<SpriteRenderer>();
+        //Inicializamos el diccionario de estados
+        states = new Dictionary<PlayerStatesEnum, PlayerStates>() 
+        { 
+            { PlayerStatesEnum.PlayerGrounded, new PlayerGrounded(this) }, 
+            { PlayerStatesEnum.PlayerJumping, new PlayerJumping(this) } 
+        };
+        //Obtenemos el componente Transform del player
+        tr = transform;
+        //Obtenemos el componente Rigidbody2D del player
+        rb = this.GetComponent<Rigidbody2D>();
+        //Obtenemos el componente SpriteRenderer del player
+        rend = this.GetComponent<SpriteRenderer>();
         
     }
-    /* 2º Metodo que se ejecuta */
+    /* Método Start*/
     private void Start()
     {
         ChangeState(PlayerStatesEnum.PlayerGrounded);
     }
-    /* Metodo de actualización */
+    /* Método Update */
     void Update()
     {
+        //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
     }
-    /* Metodo de actualización */
+    /* Método FixedUpdate */
     void FixedUpdate(){
+        //Si el estado actual del player es distinto de null, ejecutamos el método FixedTick
         currentState?.FixedTick();
     }
-    /* Metodo de cambio de estado */
+    /* Método ChangeState */
     public void ChangeState(PlayerStatesEnum stateToGo)
     {
         currentState?.OnEnd();
-        currentStateEnum=stateToGo;
+        currentStateEnum = stateToGo;
         currentState = states[stateToGo];
         currentState.OnBegin();
     }
-    /* Metodo para iniciar el sistema de particulas */
-    public void StartParticleSystem(bool oneShot=false){
-        particleSystem.loop=oneShot;
+    /* Método ChangeState */
+    public void StartParticleSystem(bool oneShot = false)
+    {
+        particleSystem.loop = oneShot;
         if(!particleSystem.isPlaying) 
+        {
             particleSystem.Play();
+        }
     }
-    /* Metodo para parar el sistema de particulas */
+    /* Método StopParticleSystem */
     public void StopParticleSystem(){
+
         if(particleSystem.isPlaying) 
+        {
             particleSystem.Stop();
+        }
     }
-    /* Metodo para parar el sistema de particulas */
-    public void SwitchPlayerDirection(bool right){
-        GameManager.instance.CameraControllerInstance.offsetDirection=right?0.5f:-0.5f;
-        tr.localScale = new Vector3(right?1:-1, 1, 1);
-        directionRight=right;
+    /* Método SwitchPlayerDirection */
+    public void SwitchPlayerDirection(bool right)
+    {
+        GameManager.instance.CameraControllerInstance.offsetDirection = right?0.5f:-0.5f;
+        tr.localScale = new Vector3((right?1:-1), 1, 1);
+        directionRight = right;
     }
 
-   
+    /* Método OnCollisionEnter2D */
     private void OnCollisionEnter2D(Collision2D other)
     {
 
@@ -81,21 +104,23 @@ public class PlayerController : MonoBehaviour
             ProcessEnemyHit(other.contacts[0]);
         }
     }
-
+    /* Método ProcessEnemyHit */
     private void ProcessEnemyHit(ContactPoint2D point)
     {
          RaycastHit2D hit = Physics2D.Raycast((playerFeet.position), -Tr.up,1);
         
-         if(hit.collider.CompareTag("Enemy")){
-             Rb.AddForce(Vector2.up * (3), ForceMode2D.Impulse);
-             hit.collider.GetComponent<Enemy>().OnHit();
+         if(hit.collider.CompareTag("Enemy"))
+         {
+            Rb.AddForce(Vector2.up * (3), ForceMode2D.Impulse);
+            hit.collider.GetComponent<Enemy>().OnHit();
          }
-         else{
-            if(invulnerable)return;
+         else
+         {
+            if(invulnerable) return;
             StartCoroutine(PlayerGotHit(point));
          }
     }
-
+    /* Método PlayerGotHit */
     private IEnumerator PlayerGotHit(ContactPoint2D point)
     {
         
@@ -126,17 +151,6 @@ public class PlayerController : MonoBehaviour
 
         }
         rend.color=Color.white;
-        invulnerable=false;
-        
-
-        
+        invulnerable=false;  
     }
-
-
-    /* Propertys */
-    public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
-    public Transform Tr { get => tr;  }
-    public Animator AnimationController { get => animationController; }
-    public Rigidbody2D Rb { get => rb; }
-    public Transform PlayerFeet { get => playerFeet;  }
 }
