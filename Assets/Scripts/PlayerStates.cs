@@ -121,13 +121,13 @@ public class PlayerJumping : PlayerStates
     private void DoubleJump()
     {
         Debug.Log("numberOfJumps: " + numberOfJumps);
-        //Aumentamos el numero de saltos
-        numberOfJumps++;
         //Si el numero de saltos es mayor que 2, el código no se ejecutará
         if (numberOfJumps >= 2) return;
         base.controller.Rb.velocity = Vector2.zero;
         //Animacion de salto
         base.controller.AnimationController.SetTrigger(jumpHash);
+        //Aumentamos el numero de saltos
+        numberOfJumps++;
         //Se ejecuta el salto
         base.controller.Rb.AddForce(Vector2.up * (jumpForce), ForceMode2D.Impulse);
     }
