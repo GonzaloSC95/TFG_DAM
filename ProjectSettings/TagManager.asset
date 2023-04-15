@@ -9,6 +9,7 @@ TagManager:
   - HoriontalPlatform
   - VerticalPlatform
   - Melon
+  - Kiwi
   layers:
   - Default
   - TransparentFX

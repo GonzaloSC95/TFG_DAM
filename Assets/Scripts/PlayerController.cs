@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private int life = 3;
     //About Points
     private static int points = 0;
+    public Text pointsText;
 
     /* Propertys */
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
@@ -169,6 +171,6 @@ public class PlayerController : MonoBehaviour
     public void AddPoints(int pointsToAdd)
     {
         points += pointsToAdd;
-        Debug.Log("Points: " + points);
+        pointsText.text = "POINTS: " + points.ToString("D3");
     }
 }

@@ -11,24 +11,25 @@ public class FruitController : MonoBehaviour
     private PlayerController playerScript;
 
     /* Métodos */
-    /* Método Start */
-    private void Start()
+    /* Método Awake*/
+    private void Awake()
     {
         // Obtenemos la referencia al jugador
         playerScript = FindObjectOfType<PlayerController>();
         // Asignamos los puntos de la fruta
         SetPoints();
-        //-------------------------------
-        Debug.Log("-----------------Start Fruit------------- " + gameObject.tag + " --> POINTS = " + points);
+    }
+
+    /* Método Start */
+    private void Start()
+    {
     }
 
     /* Método OnTriggerEnter2D */
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("-----------------Trigger-------------");
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player has collided with a fruit");
             // Añadimos los puntos al jugador
             playerScript.AddPoints(points);
             // Destruimos la fruta
