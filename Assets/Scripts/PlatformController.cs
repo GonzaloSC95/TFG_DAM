@@ -9,30 +9,40 @@ public class PlatformController : MonoBehaviour {
     public float distance = 1f; // Distancia total de movimiento
     public float direction; // Dirección de movimiento
     private float startingPosition; // Posición inicial del objeto
-    
-    /* Método Start */
-    void Start() {
 
-        if(CompareTag("HoriontalPlatform"))
+    /* Métodos */
+    /* Método  Awake*/
+    private void Awake()
+    {
+        if (CompareTag("HoriontalPlatform"))
         {
             startingPosition = transform.position.x; // Guardar la posición inicial del objeto
         }
-        else if(CompareTag("VerticalPlatform"))
+        else if (CompareTag("VerticalPlatform"))
         {
             startingPosition = transform.position.y; // Guardar la posición inicial del objeto
         }
     }
-    /* Método Update */
-    void Update () {
-
-        if(CompareTag("HoriontalPlatform"))
+    /* Método FixedUpdate */
+    private void FixedUpdate()
+    {
+        if (CompareTag("HoriontalPlatform"))
         {
             MoveHorizontal();
         }
-        else if(CompareTag("VerticalPlatform"))
+        else if (CompareTag("VerticalPlatform"))
         {
             MoveVertical();
         }
+    }
+    /* Método Start */
+    private void Start() 
+    {
+
+    }
+    /* Método Update */
+    void Update () 
+    {
 
     }
     /* Método MoveHorizontal */
@@ -60,7 +70,8 @@ public class PlatformController : MonoBehaviour {
         transform.position += new Vector3(0f, (direction * speed * Time.deltaTime), 0f);
     }
     /* Método OnCollisionEnter2D */
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnCollisionEnter2D(Collision2D other) 
+    {
         // Si la plataforma colisiona con un objeto, este se convierte en hijo de la plataforma
         if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))
         {
@@ -69,7 +80,8 @@ public class PlatformController : MonoBehaviour {
         
     }
     /* Método OnCollisionExit2D */
-    private void OnCollisionExit2D(Collision2D other) {
+    private void OnCollisionExit2D(Collision2D other) 
+    {
         // Si la plataforma deja de colisionar con un objeto, este deja de ser hijo de la plataforma
         if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))
         {

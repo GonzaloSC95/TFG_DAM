@@ -122,6 +122,9 @@ public class PlayerJumping : PlayerStates
     {
         //Si el numero de saltos es mayor que 2, el código no se ejecutará
         if (numberOfJumps >= 2) return;
+        // Se ejecuta el sonido
+        base.controller.GetComponent<PlayerController>().PlaySound("jump");
+        //Velocidad del salto
         base.controller.Rb.velocity = Vector2.zero;
         //Animacion de salto
         base.controller.AnimationController.SetTrigger(jumpHash);

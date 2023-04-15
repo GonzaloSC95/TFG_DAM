@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
     //About Points
     private static int points = 0;
     public Text pointsText;
+    //About Sounds
+    private AudioSource audioSourcePlayer;
+    public AudioClip fruitSound;
+    public AudioClip jumpSound;
 
     /* Propertys */
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
@@ -49,6 +53,8 @@ public class PlayerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         //Obtenemos el componente SpriteRenderer del player
         rend = this.GetComponent<SpriteRenderer>();
+        //Obtenemos el componente AudioSource del player
+        audioSourcePlayer = GetComponent<AudioSource>();
         
     }
 
@@ -172,5 +178,19 @@ public class PlayerController : MonoBehaviour
     {
         points += pointsToAdd;
         pointsText.text = "POINTS: " + points.ToString("D3");
+    }
+
+    /* Método PlaySounds */
+    public void PlaySound(String sound)
+    {
+        switch(sound)
+        {
+            case "fruit":
+                audioSourcePlayer.PlayOneShot(fruitSound);
+            break;
+            case "jump":
+                audioSourcePlayer.PlayOneShot(jumpSound);
+                break;
+        }
     }
 }

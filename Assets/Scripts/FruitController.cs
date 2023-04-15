@@ -8,21 +8,21 @@ public class FruitController : MonoBehaviour
     /* Puntos que aporta la fruta */
     private int points;
     /* Referencia al jugador */
-    private PlayerController playerScript;
+    private PlayerController player;
+    /* Animaciones */
+    private Animator anim;
+    private float timeBeforeDestroy = 0.5f;
 
     /* Métodos */
     /* Método Awake*/
     private void Awake()
     {
         // Obtenemos la referencia al jugador
-        playerScript = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<PlayerController>();
+        // Obtenemos el compoenente Animator
+        anim = GetComponent<Animator>();
         // Asignamos los puntos de la fruta
         SetPoints();
-    }
-
-    /* Método Start */
-    private void Start()
-    {
     }
 
     /* Método OnTriggerEnter2D */
@@ -30,10 +30,14 @@ public class FruitController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            // Ejecutamos la animación collected
+            anim.SetTrigger("collected");
+            // Emitimos el sonido de recolección
+            player.PlaySound("fruit");
             // Añadimos los puntos al jugador
-            playerScript.AddPoints(points);
+            player.AddPoints(points);
             // Destruimos la fruta
-            Destroy(gameObject);
+            Invoke("DestroyFruit", timeBeforeDestroy);
         }
     }
 
@@ -52,6 +56,12 @@ public class FruitController : MonoBehaviour
                 points = 5;
                 break;
         }
+    }
+
+    /* Método DestroyFruit */
+    private void DestroyFruit()
+    {
+        Destroy(gameObject);
     }
 }
 
