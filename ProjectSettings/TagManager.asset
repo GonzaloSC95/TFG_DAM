@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - HoriontalPlatform
   - VerticalPlatform
+  - Melon
   layers:
   - Default
   - TransparentFX

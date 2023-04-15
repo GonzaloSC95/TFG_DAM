@@ -120,7 +120,6 @@ public class PlayerJumping : PlayerStates
     /* Método DoubleJump */
     private void DoubleJump()
     {
-        Debug.Log("numberOfJumps: " + numberOfJumps);
         //Si el numero de saltos es mayor que 2, el código no se ejecutará
         if (numberOfJumps >= 2) return;
         base.controller.Rb.velocity = Vector2.zero;

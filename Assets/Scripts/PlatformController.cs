@@ -39,7 +39,6 @@ public class PlatformController : MonoBehaviour {
     void MoveHorizontal()
     {
         // Cambiar la dirección de movimiento si el objeto alcanza el límite de distancia
-        Debug.Log(this + "-->direction " + direction);
         if ((transform.position.x >= (startingPosition + distance/2f)) 
         || (transform.position.x <= (startingPosition - distance/2f))) {
             direction = -direction;
@@ -52,7 +51,6 @@ public class PlatformController : MonoBehaviour {
     void MoveVertical()
     {
         // Cambiar la dirección de movimiento si el objeto alcanza el límite de distancia
-        Debug.Log(this + "-->direction " + direction);
         if ((transform.position.y >= (startingPosition + distance/2f)) 
         || (transform.position.y <= (startingPosition - distance/2f))) {
             direction = -direction;
@@ -61,7 +59,7 @@ public class PlatformController : MonoBehaviour {
         // Calcular la nueva posición del objeto
         transform.position += new Vector3(0f, (direction * speed * Time.deltaTime), 0f);
     }
-
+    /* Método OnCollisionEnter2D */
     private void OnCollisionEnter2D(Collision2D other) {
         // Si la plataforma colisiona con un objeto, este se convierte en hijo de la plataforma
         if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))
@@ -70,6 +68,7 @@ public class PlatformController : MonoBehaviour {
         }
         
     }
+    /* Método OnCollisionExit2D */
     private void OnCollisionExit2D(Collision2D other) {
         // Si la plataforma deja de colisionar con un objeto, este deja de ser hijo de la plataforma
         if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Enemy"))

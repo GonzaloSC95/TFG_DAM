@@ -13,14 +13,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private Animator animationController;
     [SerializeField]private ParticleSystem particleSystem;
     [SerializeField] Transform playerFeet;
-    SpriteRenderer rend;
+    private SpriteRenderer rend;
     private Transform tr;
     private Rigidbody2D rb;
-    bool directionRight;
-    bool invulnerable;
-    //invulnerable time
-    float invulTime=2;
-    int life=3;
+    private bool directionRight;
+    //About life
+    private bool invulnerable;
+    private float invulTime = 2;
+    private int life = 3;
+    //About Points
+    private static int points = 0;
 
     /* Propertys */
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
@@ -47,22 +49,26 @@ public class PlayerController : MonoBehaviour
         rend = this.GetComponent<SpriteRenderer>();
         
     }
+
     /* Método Start*/
     private void Start()
     {
         ChangeState(PlayerStatesEnum.PlayerGrounded);
     }
+
     /* Método Update */
     void Update()
     {
         //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
     }
+
     /* Método FixedUpdate */
     void FixedUpdate(){
         //Si el estado actual del player es distinto de null, ejecutamos el método FixedTick
         currentState?.FixedTick();
     }
+
     /* Método ChangeState */
     public void ChangeState(PlayerStatesEnum stateToGo)
     {
@@ -71,6 +77,7 @@ public class PlayerController : MonoBehaviour
         currentState = states[stateToGo];
         currentState.OnBegin();
     }
+
     /* Método StartParticleSystem */
     public void StartParticleSystem(bool oneShot = false)
     {
@@ -80,6 +87,7 @@ public class PlayerController : MonoBehaviour
             particleSystem.Play();
         }
     }
+
     /* Método StopParticleSystem */
     public void StopParticleSystem(){
 
@@ -88,6 +96,7 @@ public class PlayerController : MonoBehaviour
             particleSystem.Stop();
         }
     }
+
     /* Método SwitchPlayerDirection */
     public void SwitchPlayerDirection(bool right)
     {
@@ -104,6 +113,7 @@ public class PlayerController : MonoBehaviour
             ProcessEnemyHit(other.contacts[0]);
         }
     }
+
     /* Método ProcessEnemyHit */
     private void ProcessEnemyHit(ContactPoint2D point)
     {
@@ -120,6 +130,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(PlayerGotHit(point));
          }
     }
+
     /* Método PlayerGotHit */
     private IEnumerator PlayerGotHit(ContactPoint2D point)
     {
@@ -152,5 +163,12 @@ public class PlayerController : MonoBehaviour
         }
         rend.color=Color.white;
         invulnerable=false;  
+    }
+
+    /* Método AddPoints */
+    public void AddPoints(int pointsToAdd)
+    {
+        points += pointsToAdd;
+        Debug.Log("Points: " + points);
     }
 }
