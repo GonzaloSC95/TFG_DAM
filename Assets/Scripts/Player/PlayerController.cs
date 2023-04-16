@@ -169,8 +169,8 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        rend.color=Color.white;
-        invulnerable=false;  
+        rend.color = Color.white;
+        invulnerable = false;  
     }
 
     /* Método AddPoints */

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3992705208899059037}
   - component: {fileID: 3992705208899059036}
-  - component: {fileID: 3992705208899059038}
   - component: {fileID: 3992705208899059033}
   - component: {fileID: 3992705208899059032}
   - component: {fileID: 3992705208899059039}
+  - component: {fileID: 3992705208899059038}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Enemy
@@ -87,24 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3992705208899059038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3992705208899059027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7854296ba5c151b42a684dbfc6dd16da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  life: 0
-  points: 0
-  speed: 0.46
-  col: {fileID: 3992705208899059032}
-  rb: {fileID: 3992705208899059033}
-  anim: {fileID: 3992705208899059039}
 --- !u!50 &3992705208899059033
 Rigidbody2D:
   serializedVersion: 4
@@ -125,7 +107,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &3992705208899059032
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -171,6 +153,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3992705208899059038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3992705208899059027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7854296ba5c151b42a684dbfc6dd16da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 1
+  points: 20
+  speed: 0.46
 --- !u!1 &3992705209476023122
 GameObject:
   m_ObjectHideFlags: 0

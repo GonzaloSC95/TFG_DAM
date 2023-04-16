@@ -15,20 +15,19 @@ public class EnemySpawnController : MonoBehaviour
     private GameObject enemyPrefab;
     private GameObject enemy;
 
-    /* Métodos */
-    /* Método Start */
+    /* MÃ©todo */
+    /* MÃ©todo Start */
     private void Start()
     {
-        // Si pasado el spawnTimeRate no hay ningún enemigo en la lista, generamos uno nuevo
+        // Si pasado el spawnTimeRate no hay ningï¿½n enemigo en la lista, generamos uno nuevo
         InvokeRepeating("SpawnEnemy", spawnTime, spawnTimeRate);
     }
 
-    /* Método CleanDeadEnemies */
+    /* MÃ©todo CleanDeadEnemies */
     private void CleanDeadEnemies()
     {
         if(!(enemy == null))
         {
-            Debug.Log("CleanDeadEnemies --> -- enemy.activeInHierarchyt --> " + enemy.activeInHierarchy);
             if (!(enemy.activeInHierarchy))
             {
                 // Destruimos el enemigo inactivo para que se genere uno nuevo
@@ -37,12 +36,12 @@ public class EnemySpawnController : MonoBehaviour
         }
         
     }
-    /* Método SpawnEnemy */
+    /* MÃ©todo SpawnEnemy */
     private void SpawnEnemy()
     {
         // Limpiamos la lista de enemigos eliminados cada deleteTime
         CleanDeadEnemies();
-        // Si no hay ningún enemigo instanciado
+        // Si no hay ningï¿½n enemigo instanciado
         if (enemy == null)
         {
             //Asignamos el enemigo de forma aleatoria
@@ -52,16 +51,13 @@ public class EnemySpawnController : MonoBehaviour
                 // Instanciamos el enemigo
                 enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             }
-            Debug.Log("SpawnEnemy --> -- enemy.activeInHierarchyt --> " + enemy.activeInHierarchy);
         }
     }
 
-    /* Método RandomEnemy */
+    /* MÃ©todo RandomEnemy */
     private void SetRandomEnemy()
     {
-        Debug.Log("enemyPrefabs.Length" + enemyPrefabs.Length);
         int randomInt = new System.Random().Next(0, (enemyPrefabs.Length));
-        Debug.Log("Debug.Log(randomInt): " + randomInt);
         enemyPrefab = enemyPrefabs[randomInt];
     }
 }
