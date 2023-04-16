@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour
 {
+    /* Atributos */
     public int life;
     public int points;
     public RaycastHit2D hit;
@@ -12,24 +13,21 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 direction = -Vector3.right;
 
 
-
+    /* Métodos */
     public abstract void OnHit();
     public abstract void OnWallCollide();
+    /* Método Awake */
     private void Awake()
     {
         tr = this.transform;
         groundLayer= LayerMask.GetMask("Ground");
     }
+    /* Método Start */
     private void Start()
     {
         GameManager.instance.SubscribeEnemy(this);
     }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-         
-    }
-
+    /* Método FixedUpdate */
     public virtual void FixedUpdate()
     {
         hit = Physics2D.Raycast((tr.position), direction, 2, groundLayer);
@@ -42,6 +40,12 @@ public abstract class Enemy : MonoBehaviour
             }
         }
     }
+    /* Método OnCollisionEnter2D */
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+         
+    }
+    /* Método ChangeDirection */
     protected void ChangeDirection()
     {
         if (direction == Vector3.right)

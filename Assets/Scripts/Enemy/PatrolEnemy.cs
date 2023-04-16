@@ -5,26 +5,29 @@ using System.Collections;
 public class PatrolEnemy : Enemy
 {
 
+    /* Atributos */
     [SerializeField] float speed;
     [SerializeField]Collider2D col;
     [SerializeField]Rigidbody2D rb;
     [SerializeField] Animator anim;
 
+    /* Métodos */
+    /* Método OnHit */
     public override void OnHit()
     {
        StartCoroutine( Die());
     }
-
-    
-
+    /* Método Update */
     private void Update()
     {
         tr.position += direction * (speed * Time.deltaTime);
     }
+    /* Método OnWallCollide */
     public override void OnWallCollide()
     {
         ChangeDirection();
     }
+    /* Método IEnumerator */
     private IEnumerator Die(){
         col.enabled=false;
         rb.simulated=false;
