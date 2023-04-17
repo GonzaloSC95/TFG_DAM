@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class CofreController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /* Atributos */
+    private int points;
+    private Animator anim;
 
-    // Update is called once per frame
-    void Update()
+    /* Métodos */
+    /* Método Start */
+    private void Start()
     {
-        
+        points = 100;
+        anim = GetComponent<Animator>();
+    }
+    /* Método OnTriggerEnter2D */
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            if(other.GetComponent<PlayerController>().getPlayerHaskey())
+            {
+                other.GetComponent<PlayerController>().AddPoints(points);
+                anim.SetTrigger("Open");
+            }
+        }
     }
 }

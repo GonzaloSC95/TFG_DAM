@@ -25,10 +25,13 @@ public class PlayerController : MonoBehaviour
     //About Points
     private static int points = 0;
     public Text pointsText;
+    // About Cofre key
+    private bool playerHasKey = false;
     //About Sounds
     private AudioSource audioSourcePlayer;
     public AudioClip fruitSound;
     public AudioClip jumpSound;
+    public AudioClip KeySound;
 
     /* Propertys */
     public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
@@ -116,9 +119,14 @@ public class PlayerController : MonoBehaviour
     /* Método OnCollisionEnter2D */
     private void OnCollisionEnter2D(Collision2D other)
     {
-
         if(other.gameObject.CompareTag("Enemy")){
             ProcessEnemyHit(other.contacts[0]);
+        }
+        if (other.gameObject.CompareTag("Key"))
+        {
+            PlaySound("key");
+            setPlayerHaskey(true);
+            Destroy(other.gameObject);
         }
     }
 
@@ -191,6 +199,19 @@ public class PlayerController : MonoBehaviour
             case "jump":
                 audioSourcePlayer.PlayOneShot(jumpSound);
                 break;
+            case "key":
+                audioSourcePlayer.PlayOneShot(KeySound); 
+                break;
         }
+    }
+    /* Método setPlayerHaskey */
+    public void setPlayerHaskey(bool playerHasKey)
+    {
+        this.playerHasKey = playerHasKey;
+    }
+    /* Método getPlayerHaskey */
+    public bool getPlayerHaskey()
+    {
+        return playerHasKey;
     }
 }

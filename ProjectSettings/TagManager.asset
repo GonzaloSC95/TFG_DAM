@@ -10,6 +10,7 @@ TagManager:
   - VerticalPlatform
   - Melon
   - Kiwi
+  - Key
   layers:
   - Default
   - TransparentFX
