@@ -1,6 +1,5 @@
 {
   "files.exclude": {
-    "**/.gitattributes": true,
     "**/.DS_Store": true,
     "**/.git": true,
     "**/.gitignore": false,
@@ -22,7 +21,7 @@
     "**/*.jpg": false,
     "**/*.jpeg": false,
     "**/*.png": false,
-    "**/*.psd": true,
+    "**/*.psd": false,
     "**/*.tga": true,
     "**/*.tif": true,
     "**/*.tiff": true,
@@ -51,6 +50,13 @@
     "Obj/": true,
     "ProjectSettings/": true,
     "temp/": true,
-    "Temp/": true
+    "Temp/": true,
+    "**/*.sln": true,
+    "**/*.csproj": true,
+    "**/*.vsconfig": true,
+    "UserSettings/": true,
+    "Logs/": true,
+    "Packages/": true,
+    "**/*.gitattributes": true
   }
 }
