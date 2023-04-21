@@ -20,7 +20,7 @@ public abstract class Enemy : MonoBehaviour
     /* About Layer */
     protected int groundLayer;
     /* About Player */
-    protected GameObject playerController;
+    protected PlayerController playerController;
 
 
     /* Métodos Abstractos */
@@ -38,11 +38,10 @@ public abstract class Enemy : MonoBehaviour
     }
 
     /* Método Start */
-    private void Start()
+    public virtual void Start()
     {
         rend = GetComponent<SpriteRenderer>();
-        playerController = GameObject.Find("Player");
-        GameManager.instance.SubscribeEnemy(this);
+        playerController = GameManager.Instance.PlayerController;
     }
     
     /* Método IEnumerator */
@@ -81,7 +80,6 @@ public abstract class Enemy : MonoBehaviour
                 }
             }
         
-            GameManager.instance.UnsuscribeEnemy(this);
             gameObject.SetActive(false);
             // Le sumamos los puntos al jugador por matar al enemigo
             playerController.GetComponent<PlayerController>().AddPoints(points);

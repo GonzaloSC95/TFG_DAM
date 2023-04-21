@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -11,34 +12,26 @@ public class PlayerController : MonoBehaviour
     public Dictionary<PlayerStatesEnum, PlayerStates> states ;
     private PlayerStates currentState;
     private PlayerStatesEnum currentStateEnum;
-    [SerializeField]private Animator animationController;
-    [SerializeField]private ParticleSystem particleSystem;
-    [SerializeField] Transform playerFeet;
+    [SerializeField] private Animator animationController;
+    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private Transform playerFeet;
     private SpriteRenderer rend;
     private Transform tr;
     private Rigidbody2D rb;
     private bool directionRight;
     //About life
-    private bool invulnerable;
-    private float invulTime = 2;
-    private int life = 3;
+    private static bool invulnerable;
+    private static float invulTime = 2;
+    private int life = 1;
     //About Points
-    private static int points = 0;
-    public Text pointsText;
+    private int points = 0;
     // About Cofre key
     private bool playerHasKey = false;
     //About Sounds
     private AudioSource audioSourcePlayer;
-    public AudioClip fruitSound;
+    public AudioClip CollectSound;
     public AudioClip jumpSound;
-    public AudioClip KeySound;
-
-    /* Propertys */
-    public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
-    public Transform Tr { get => tr; }
-    public Animator AnimationController { get => animationController; }
-    public Rigidbody2D Rb { get => rb; }
-    public Transform PlayerFeet { get => playerFeet; }
+    
 
     /* Métodos */
     /* Método Awake*/
@@ -58,6 +51,8 @@ public class PlayerController : MonoBehaviour
         rend = this.GetComponent<SpriteRenderer>();
         //Obtenemos el componente AudioSource del player
         audioSourcePlayer = GetComponent<AudioSource>();
+        //Pintamos la vida actual del player
+        GameManager.Instance.LifePlayerText = life.ToString();
         
     }
 
@@ -72,12 +67,16 @@ public class PlayerController : MonoBehaviour
     {
         //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
+        //Aqui se controla la muerte del Player
+        PlayerDie();
     }
 
     /* Método FixedUpdate */
     void FixedUpdate(){
         //Si el estado actual del player es distinto de null, ejecutamos el método FixedTick
         currentState?.FixedTick();
+        //De esta forma evitamos que el player atraviese el collider del grid
+        Rb.velocity = Vector2.ClampMagnitude(rb.velocity, 7);
     }
 
     /* Método ChangeState */
@@ -92,7 +91,10 @@ public class PlayerController : MonoBehaviour
     /* Método StartParticleSystem */
     public void StartParticleSystem(bool oneShot = false)
     {
-        particleSystem.loop = oneShot;
+        // Obtener el MainModule del ParticleSystem
+        ParticleSystem.MainModule main = particleSystem.main;
+        main.loop = oneShot;
+
         if(!particleSystem.isPlaying) 
         {
             particleSystem.Play();
@@ -111,23 +113,70 @@ public class PlayerController : MonoBehaviour
     /* Método SwitchPlayerDirection */
     public void SwitchPlayerDirection(bool right)
     {
-        GameManager.instance.CameraControllerInstance.offsetDirection = right?0.2f:-0.2f; 
-        tr.localScale = new Vector3((right?1:-1), 1, 1);
+        GameManager.Instance.CameraControllerInstance.offsetDirection = right ? 0.2f : -0.2f; 
+        tr.localScale = new Vector3((right ? 1 : -1), 1, 1);
         directionRight = right;
     }
 
     /* Método OnCollisionEnter2D */
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.CompareTag("Enemy")){
-            ProcessEnemyHit(other.contacts[0]);
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            foreach (ContactPoint2D contact in other.contacts)
+            {
+                if (contact.normal.y > 0.5f)
+                {
+                    //El player no pierde vida al saltar encima
+                    ProcessEnemyHit(contact);
+                }
+                else if (Mathf.Abs(contact.normal.x) > 0.5f)
+                {
+                    //El player solo pierde vida si le dan por los lados encima
+                    StartCoroutine(PlayerGotHit(contact));
+                }
+            }
         }
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            //El player solo pierde vida si cae encima
+            foreach (ContactPoint2D contact in other.contacts)
+            {
+                if (Vector3.Dot(contact.normal, Vector3.up) > 0.5f)
+                {
+                    Debug.Log("El objeto emisor ha colisionado con este objeto desde arriba.");
+                    // Aquí puedes reducir la vida del objeto receptor
+                    StartCoroutine(PlayerGotHit(contact));
+                }
+            }
+        }
+    }
+
+    /* Método OnTriggerEnter2D */
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.gameObject.CompareTag("Key"))
         {
             PlaySound("key");
-            setPlayerHaskey(true);
+            PlayerHasKey = true;
+            Destroy(other.gameObject);
+            GameManager.Instance.KeyImg.SetActive(true);
+        }
+        if (other.gameObject.CompareTag("Life"))
+        {
+            PlaySound("life");
+            AddLife(1);
             Destroy(other.gameObject);
         }
+        if (other.gameObject.CompareTag("End"))
+        {
+            //Aqui se controla la vitoria del Player
+            //PlaySound("Win"); TODO
+            PlayerWin();
+        }
+
+        //Aqui se controla la vitoria del Player
+        PlayerWin();
     }
 
     /* Método ProcessEnemyHit */
@@ -140,23 +189,17 @@ public class PlayerController : MonoBehaviour
             Rb.AddForce(Vector2.up * (3), ForceMode2D.Impulse);
             hit.collider.GetComponent<Enemy>().OnHit();
          }
-         else
-         {
-            if(invulnerable) return;
-            StartCoroutine(PlayerGotHit(point));
-         }
     }
 
     /* Método PlayerGotHit */
     private IEnumerator PlayerGotHit(ContactPoint2D point)
     {
-        
-        rb.AddForce(((point.normal)+(Vector2.up))*1.5f, ForceMode2D.Impulse);
+        Rb.AddForce(((point.normal)+(Vector2.up))*0.5f, ForceMode2D.Impulse);
         WaitForEndOfFrame endOfFrame= new WaitForEndOfFrame();
         Color color=new Color(1,1,1,1);
         invulnerable=true;
         animationController.SetTrigger("Hit");
-        life--;
+        RemoveLife(1);
         for (float i = 0; i < invulTime;)
         {
           
@@ -185,7 +228,45 @@ public class PlayerController : MonoBehaviour
     public void AddPoints(int pointsToAdd)
     {
         points += pointsToAdd;
-        pointsText.text = "POINTS: " + points.ToString("D3");
+        GameManager.Instance.PointsPlayerText = "POINTS: " + points.ToString("D3");
+    }
+
+    /* Método AddLife */
+    public void AddLife(int lifeNum)
+    {
+        if (life == 3) return;
+        life += lifeNum;
+        GameManager.Instance.LifePlayerText = life.ToString();
+    }
+
+    /* Método RemoveLife */
+    public void RemoveLife(int lifeNum)
+    {
+        life -= lifeNum;
+        GameManager.Instance.LifePlayerText = life.ToString();
+    }
+
+    /* Método PlayerDie */
+    public void PlayerDie()
+    {
+        if (life <= 0)
+        {
+            //TODO: Iniciar Animacion o Sistema de particulas
+            //Si la vida llega a 0 reiniciamos la escena/juego
+            GameManager.Instance.Invoke("RestartScene", 5f);
+        }
+    }
+
+    /* Método PlayerWin */
+    public void PlayerWin()
+    {
+        //TODO: definir condiciones para la victoria del player y gestionar el cambio de escena
+        if((life>0) && (PlayerHasKey))
+        {
+            Debug.Log("El Player ha ganado");
+            return;
+        }
+        Debug.Log("El Player AUN NO ha ganado");
     }
 
     /* Método PlaySounds */
@@ -194,24 +275,30 @@ public class PlayerController : MonoBehaviour
         switch(sound)
         {
             case "fruit":
-                audioSourcePlayer.PlayOneShot(fruitSound);
+                audioSourcePlayer.PlayOneShot(CollectSound);
             break;
             case "jump":
                 audioSourcePlayer.PlayOneShot(jumpSound);
                 break;
             case "key":
-                audioSourcePlayer.PlayOneShot(KeySound); 
+                audioSourcePlayer.PlayOneShot(CollectSound); 
+                break;
+            case "life":
+                audioSourcePlayer.PlayOneShot(CollectSound);
                 break;
         }
     }
-    /* Método setPlayerHaskey */
-    public void setPlayerHaskey(bool playerHasKey)
-    {
-        this.playerHasKey = playerHasKey;
-    }
-    /* Método getPlayerHaskey */
-    public bool getPlayerHaskey()
-    {
-        return playerHasKey;
+
+    /* Getters y Setters*/
+    public PlayerStatesEnum CurrentStateEnum { get => currentStateEnum; }
+    public Transform Tr { get => tr; }
+    public Animator AnimationController { get => animationController; }
+    public Rigidbody2D Rb { get => rb; }
+    public Transform PlayerFeet { get => playerFeet; }
+
+    public bool PlayerHasKey 
+    { 
+        get => playerHasKey;
+        set => playerHasKey = value;
     }
 }

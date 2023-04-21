@@ -8,19 +8,25 @@ public class CofreController : MonoBehaviour
     private int points;
     private Animator anim;
 
-    /* Métodos */
-    /* Método Start */
-    private void Start()
+    /* MÃ©todos */
+    /* MÃ©todo InicializarComponentes */
+    private void InicializarComponentes()
     {
         points = 100;
         anim = GetComponent<Animator>();
     }
-    /* Método OnTriggerEnter2D */
+    /* MÃ©todo Start */
+    private void Start()
+    {
+        // Inicializamos los componentes
+        InicializarComponentes();
+    }
+    /* Mï¿½todo OnTriggerEnter2D */
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            if(other.GetComponent<PlayerController>().getPlayerHaskey())
+            if(other.GetComponent<PlayerController>().PlayerHasKey)
             {
                 other.GetComponent<PlayerController>().AddPoints(points);
                 anim.SetTrigger("Open");

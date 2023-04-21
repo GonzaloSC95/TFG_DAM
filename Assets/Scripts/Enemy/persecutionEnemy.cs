@@ -6,28 +6,45 @@ using UnityEngine;
 public class persecutionEnemy : Enemy
 {
     /* Atributos */
-    private float maxDistance = 2f;
+    private float maxDistance;
 
     /* Métodos */
-    /* Método FixedUpdate */
-    void FixedUpdate()
+    /* Método InicializarComponentes */
+    public void InicializarComponentes()
     {
-        // Si el player esta cerca le perseguimos
-        if (IsPlayerNearEnemy())
+        maxDistance = 2f;
+    }
+    /* Método Start */
+    public override void Start() 
+    { 
+        base.Start();
+        InicializarComponentes();
+        StartCoroutine(ProsecutionEnemyLoop()); 
+    }
+    /* Método ProsecutionEnemyLoop*/
+    private IEnumerator ProsecutionEnemyLoop()
+    {
+        while (life > 0)
         {
-            PerseguirPlayer();
-        }
-        else
-        {
-            anim.SetTrigger("Idle");
+            Debug.Log(IsPlayerNearEnemy());
+            switch (IsPlayerNearEnemy())
+            {
+                case true:
+                    anim.SetTrigger("Walk");
+                    PerseguirPlayer(); 
+                    break;
+                case false:
+                    anim.SetTrigger("Idle");
+                    yield return new WaitUntil(() => !IsPlayerNearEnemy());
+                    break;
+            }
+            yield return GameManager.Instance.EndOfFrame;
         }
     }
-
     /* Método PerseguirPlayer*/
     private void PerseguirPlayer()
     {
         // Hacemos que el enemego vaya desde su posición hasta la del player
-        anim.SetTrigger("Walk");
         transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, speed * Time.deltaTime);
         // Hacemos que la orientación del enemigo respecto a la del player, sea la adecuada
         if(transform.position.x < playerController.transform.position.x)
@@ -39,7 +56,6 @@ public class persecutionEnemy : Enemy
             rend.flipX = false;
         }
     }
-
     /* Método IsPlayerNearEnemy */
     private bool IsPlayerNearEnemy()
     {
@@ -53,7 +69,6 @@ public class persecutionEnemy : Enemy
             return false;
         }
     }
-
     /* Método OnHit */
     public override void OnHit()
     {
