@@ -21,8 +21,9 @@ public abstract class Enemy : MonoBehaviour
     protected int groundLayer;
     /* About Player */
     protected PlayerController playerController;
-
-
+    /* About hit */
+    protected bool isHit;
+    
     /* Métodos Abstractos */
     /* Método OnHit */
     public abstract void OnHit();
@@ -48,12 +49,11 @@ public abstract class Enemy : MonoBehaviour
     public IEnumerator Die()
     {
 
-        life = life - 1;
-        anim.SetTrigger("Hit");
-
         yield return new WaitForSeconds(0.5f);
-        WaitForEndOfFrame endOfFrame = new WaitForEndOfFrame();
         Color color = new Color(1,1,1,1);
+
+        anim.SetTrigger("hit");
+        isHit = true;
 
         //Si la vida es menor o igual a 0 el enemigo muere
         if (life <= 0)
@@ -69,14 +69,14 @@ public abstract class Enemy : MonoBehaviour
                 {
                     color.a = Mathf.Lerp(0,1,j);
                     rend.color = color;
-                    yield return endOfFrame;
+                    yield return GameManager.Instance.EndOfFrame;
                 } 
 
                  for (float j = 0; j < 1; j += Time.deltaTime*10)
                 {
                     color.a = Mathf.Lerp(1,0,j);
                     rend.color = color;
-                    yield return endOfFrame;
+                    yield return GameManager.Instance.EndOfFrame;
                 }
             }
         
@@ -88,5 +88,11 @@ public abstract class Enemy : MonoBehaviour
 
         Debug.Log("Vidas del enemigo --> " + life);
 
+    }
+
+    /* Método RemoveLive */
+    public void RemoveLife(int life) {
+
+        this.life -= life;
     }
 }

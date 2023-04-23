@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class persecutionEnemy : Enemy
+public class PersecutionEnemy : Enemy
 {
     /* Atributos */
     private float maxDistance;
@@ -19,24 +19,32 @@ public class persecutionEnemy : Enemy
     { 
         base.Start();
         InicializarComponentes();
-        StartCoroutine(ProsecutionEnemyLoop()); 
+        StartCoroutine(PersecutionEnemyLoop()); 
     }
     /* Método ProsecutionEnemyLoop*/
-    private IEnumerator ProsecutionEnemyLoop()
+    private IEnumerator PersecutionEnemyLoop()
     {
         while (life > 0)
         {
-            Debug.Log(IsPlayerNearEnemy());
-            switch (IsPlayerNearEnemy())
+            if (!isHit)
             {
-                case true:
-                    anim.SetTrigger("Walk");
-                    PerseguirPlayer(); 
-                    break;
-                case false:
-                    anim.SetTrigger("Idle");
-                    yield return new WaitUntil(() => !IsPlayerNearEnemy());
-                    break;
+                switch ((IsPlayerNearEnemy()))
+                {
+                    case true:
+                        anim.SetTrigger("walk");
+                        PerseguirPlayer();
+                        break;
+                    case false:
+                        anim.SetTrigger("idle");
+                        yield return new WaitUntil(() => !IsPlayerNearEnemy());
+                        break;
+                }
+            }
+            else
+            {
+                yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+                anim.SetTrigger("idle");
+                isHit = false;
             }
             yield return GameManager.Instance.EndOfFrame;
         }

@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public  Image KeyImage;
     private string lifePlayerText;
     private string pointsPlayerText;
-    private GameObject keyImg;
     /* About End of Frames*/
     private WaitForEndOfFrame endOfFrame;
 
@@ -40,6 +39,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+        Debug.Log("GameManager is Operative--->"+ instance);
         //Inicializamos los componentes
         InicializarComponentes();
     }

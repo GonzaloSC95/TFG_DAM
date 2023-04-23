@@ -50,16 +50,15 @@ public class PlayerController : MonoBehaviour
         //Obtenemos el componente SpriteRenderer del player
         rend = this.GetComponent<SpriteRenderer>();
         //Obtenemos el componente AudioSource del player
-        audioSourcePlayer = GetComponent<AudioSource>();
-        //Pintamos la vida actual del player
-        GameManager.Instance.LifePlayerText = life.ToString();
-        
+        audioSourcePlayer = GetComponent<AudioSource>();  
     }
 
     /* Método Start*/
     private void Start()
     {
         ChangeState(PlayerStatesEnum.PlayerGrounded);
+        //Pintamos la vida actual del player
+        GameManager.Instance.LifePlayerText = life.ToString();
     }
 
     /* Método Update */
@@ -68,6 +67,7 @@ public class PlayerController : MonoBehaviour
         //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
         //Aqui se controla la muerte del Player
+        if(life <= 0) GameManager.Instance.LifePlayerText = "0";
         PlayerDie();
     }
 
@@ -123,18 +123,26 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Enemy"))
         {
+            bool removeEnemyLife = false;
             foreach (ContactPoint2D contact in other.contacts)
             {
-                if (contact.normal.y > 0.5f)
+                if (Mathf.Abs(contact.normal.y) > 0.5f)
                 {
                     //El player no pierde vida al saltar encima
                     ProcessEnemyHit(contact);
+                    removeEnemyLife = true;
                 }
                 else if (Mathf.Abs(contact.normal.x) > 0.5f)
                 {
+                    RemoveLife(1);
                     //El player solo pierde vida si le dan por los lados encima
                     StartCoroutine(PlayerGotHit(contact));
+                    removeEnemyLife = false;
                 }
+            }
+            if(removeEnemyLife)
+            {
+                other.collider.GetComponent<Enemy>().RemoveLife(1);
             }
         }
         if (other.gameObject.CompareTag("Trap"))
@@ -168,38 +176,29 @@ public class PlayerController : MonoBehaviour
             AddLife(1);
             Destroy(other.gameObject);
         }
-        if (other.gameObject.CompareTag("End"))
-        {
-            //Aqui se controla la vitoria del Player
-            //PlaySound("Win"); TODO
-            PlayerWin();
-        }
-
-        //Aqui se controla la vitoria del Player
-        PlayerWin();
     }
 
     /* Método ProcessEnemyHit */
     private void ProcessEnemyHit(ContactPoint2D point)
     {
-         RaycastHit2D hit = Physics2D.Raycast((playerFeet.position), -Tr.up,1);
-        
-         if(hit.collider.CompareTag("Enemy"))
-         {
-            Rb.AddForce(Vector2.up * (3), ForceMode2D.Impulse);
+        RaycastHit2D hit = Physics2D.Raycast((playerFeet.position), -Tr.up, 1);
+
+        if (hit.collider.CompareTag("Enemy"))
+        {
+            Rb.AddForce(((point.normal) + (Vector2.up))*1.5f, ForceMode2D.Impulse);
             hit.collider.GetComponent<Enemy>().OnHit();
-         }
+        }
     }
 
     /* Método PlayerGotHit */
     private IEnumerator PlayerGotHit(ContactPoint2D point)
     {
         Rb.AddForce(((point.normal)+(Vector2.up))*0.5f, ForceMode2D.Impulse);
-        WaitForEndOfFrame endOfFrame= new WaitForEndOfFrame();
-        Color color=new Color(1,1,1,1);
-        invulnerable=true;
+        Color color = new Color(1,1,1,1);
+        invulnerable = true;
+
         animationController.SetTrigger("Hit");
-        RemoveLife(1);
+
         for (float i = 0; i < invulTime;)
         {
           
@@ -208,7 +207,7 @@ public class PlayerController : MonoBehaviour
                 color.a=Mathf.Lerp(0,1,j);
                 rend.color=color;
                 i+=Time.deltaTime;
-                yield return endOfFrame;
+                yield return GameManager.Instance.EndOfFrame;
             } 
             
              for (float j = 0; j < 1; j+=Time.deltaTime*10)
@@ -216,7 +215,7 @@ public class PlayerController : MonoBehaviour
                 color.a=Mathf.Lerp(1,0,j);
                 rend.color=color;
                  i+=Time.deltaTime;
-                yield return endOfFrame;
+                yield return GameManager.Instance.EndOfFrame;
             }
 
         }
@@ -240,10 +239,10 @@ public class PlayerController : MonoBehaviour
     }
 
     /* Método RemoveLife */
-    public void RemoveLife(int lifeNum)
+    public void RemoveLife(int life)
     {
-        life -= lifeNum;
-        GameManager.Instance.LifePlayerText = life.ToString();
+        this.life -= life;
+        GameManager.Instance.LifePlayerText = this.life.ToString();
     }
 
     /* Método PlayerDie */
@@ -287,6 +286,13 @@ public class PlayerController : MonoBehaviour
                 audioSourcePlayer.PlayOneShot(CollectSound);
                 break;
         }
+    }
+
+    /* Método PlaySounds */
+    public void PlayerIsHit(ContactPoint2D point, int life = 1)
+    {
+        RemoveLife(life);
+        StartCoroutine(PlayerGotHit(point));
     }
 
     /* Getters y Setters*/
