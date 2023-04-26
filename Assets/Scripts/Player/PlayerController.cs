@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     //About life
     private static bool invulnerable;
     private static float invulTime = 2;
-    private int life = 1;
+    private int life = 2;
     //About Points
     private int points = 0;
     // About Cofre key
@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour
         currentState?.Tick();
         //Aqui se controla la muerte del Player
         if(life <= 0) GameManager.Instance.LifePlayerText = "0";
-        PlayerDie();
     }
 
     /* Método FixedUpdate */
@@ -134,15 +133,20 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (Mathf.Abs(contact.normal.x) > 0.5f)
                 {
-                    RemoveLife(1);
                     //El player solo pierde vida si le dan por los lados encima
                     StartCoroutine(PlayerGotHit(contact));
                     removeEnemyLife = false;
                 }
             }
+
             if(removeEnemyLife)
             {
                 other.collider.GetComponent<Enemy>().RemoveLife(1);
+            }
+            else
+            {
+                RemoveLife(1);
+                StartCoroutine(IsPlayerDie());
             }
         }
         if (other.gameObject.CompareTag("Trap"))
@@ -194,34 +198,52 @@ public class PlayerController : MonoBehaviour
     /* Método PlayerGotHit */
     private IEnumerator PlayerGotHit(ContactPoint2D point)
     {
-        Rb.AddForce(((point.normal)+(Vector2.up))*0.5f, ForceMode2D.Impulse);
+        Rb.AddForce(((point.normal)+(Vector2.up))*1.05f, ForceMode2D.Impulse);
         Color color = new Color(1,1,1,1);
         invulnerable = true;
 
-        animationController.SetTrigger("Hit");
-
-        for (float i = 0; i < invulTime;)
+        if (life > 0)
         {
-          
-            for (float j = 0; j < 1; j+=Time.deltaTime*10)
-            {
-                color.a=Mathf.Lerp(0,1,j);
-                rend.color=color;
-                i+=Time.deltaTime;
-                yield return GameManager.Instance.EndOfFrame;
-            } 
-            
-             for (float j = 0; j < 1; j+=Time.deltaTime*10)
-            {
-                color.a=Mathf.Lerp(1,0,j);
-                rend.color=color;
-                 i+=Time.deltaTime;
-                yield return GameManager.Instance.EndOfFrame;
-            }
+            animationController.SetTrigger("Hit");
 
+            for (float i = 0; i < invulTime;)
+            {
+
+                for (float j = 0; j < 1; j += Time.deltaTime * 10)
+                {
+                    color.a = Mathf.Lerp(0, 1, j);
+                    rend.color = color;
+                    i += Time.deltaTime;
+                    yield return GameManager.Instance.EndOfFrame;
+                }
+
+                for (float j = 0; j < 1; j += Time.deltaTime * 10)
+                {
+                    color.a = Mathf.Lerp(1, 0, j);
+                    rend.color = color;
+                    i += Time.deltaTime;
+                    yield return GameManager.Instance.EndOfFrame;
+                }
+
+            }
+            rend.color = Color.white;
+            invulnerable = false;
         }
-        rend.color = Color.white;
-        invulnerable = false;  
+    }
+
+    private IEnumerator IsPlayerDie()
+    {
+        if(life <= 0)
+        {
+            //TODO: Sacar menu de reinicio
+            animationController.SetTrigger("Hit");
+            StopParticleSystem();
+            animationController.SetTrigger("Die");
+            yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.1f);
+            GameManager.Instance.UnsubsCribeObject(gameObject);
+            //Si la vida llega a 0 reiniciamos la escena/juego
+            GameManager.Instance.Invoke("RestartScene", 3f);
+        }
     }
 
     /* Método AddPoints */
@@ -244,18 +266,6 @@ public class PlayerController : MonoBehaviour
     {
         this.life -= life;
         GameManager.Instance.LifePlayerText = this.life.ToString();
-    }
-
-    /* Método PlayerDie */
-    public void PlayerDie()
-    {
-        if (life <= 0)
-        {
-            //TODO: Iniciar Animacion o Sistema de particulas
-            StopParticleSystem();
-            //Si la vida llega a 0 reiniciamos la escena/juego
-            GameManager.Instance.Invoke("RestartScene", 5f);
-        }
     }
 
     /* Método PlayerWin */
@@ -309,4 +319,5 @@ public class PlayerController : MonoBehaviour
         get => playerHasKey;
         set => playerHasKey = value;
     }
+    public int Life { get => life; }
 }

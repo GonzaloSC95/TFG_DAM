@@ -27,7 +27,7 @@ public class PersecutionEnemy : Enemy
     {
         while (life > 0)
         {
-            if (!isHit)
+            if ((!isHit) && (GameManager.Instance.PlayerController.Life > 0))
             {
                 switch ((IsPlayerNearEnemy()))
                 {
@@ -43,9 +43,10 @@ public class PersecutionEnemy : Enemy
             }
             else
             {
-                yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
                 anim.SetTrigger("idle");
                 isHit = false;
+                yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+                
             }
             yield return GameManager.Instance.EndOfFrame;
         }
