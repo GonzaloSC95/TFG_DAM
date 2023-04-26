@@ -152,9 +152,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (Vector3.Dot(contact.normal, Vector3.up) > 0.5f)
                 {
-                    Debug.Log("El objeto emisor ha colisionado con este objeto desde arriba.");
                     // Aquí puedes reducir la vida del objeto receptor
+                    RemoveLife(1);
                     StartCoroutine(PlayerGotHit(contact));
+                    
                 }
             }
         }
@@ -185,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
         if (hit.collider.CompareTag("Enemy"))
         {
-            Rb.AddForce(((point.normal) + (Vector2.up))*1.5f, ForceMode2D.Impulse);
+            Rb.AddForce(((point.normal) + (Vector2.up))*1.25f, ForceMode2D.Impulse);
             hit.collider.GetComponent<Enemy>().OnHit();
         }
     }
@@ -251,6 +252,7 @@ public class PlayerController : MonoBehaviour
         if (life <= 0)
         {
             //TODO: Iniciar Animacion o Sistema de particulas
+            StopParticleSystem();
             //Si la vida llega a 0 reiniciamos la escena/juego
             GameManager.Instance.Invoke("RestartScene", 5f);
         }

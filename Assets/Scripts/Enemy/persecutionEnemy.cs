@@ -12,6 +12,7 @@ public class PersecutionEnemy : Enemy
     /* Método InicializarComponentes */
     public void InicializarComponentes()
     {
+        //Distancia a la que el enemigo detecta al Player
         maxDistance = 2f;
     }
     /* Método Start */

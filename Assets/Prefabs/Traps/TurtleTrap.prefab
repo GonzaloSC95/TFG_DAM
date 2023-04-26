@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4918914337598065100}
   - component: {fileID: 4918914337598065101}
   - component: {fileID: 4918914337598065103}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TurtleTrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

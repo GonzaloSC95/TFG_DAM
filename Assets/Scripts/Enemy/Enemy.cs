@@ -48,20 +48,21 @@ public abstract class Enemy : MonoBehaviour
     /* Método IEnumerator */
     public IEnumerator Die()
     {
-
+        float oldSpeed = speed;
         yield return new WaitForSeconds(0.5f);
         Color color = new Color(1,1,1,1);
 
         anim.SetTrigger("hit");
         isHit = true;
 
+        //Detenemos al enemigo
+        col.enabled = false;
+        rb.simulated = false;
+        speed = 0;
+
         //Si la vida es menor o igual a 0 el enemigo muere
         if (life <= 0)
         {
-            col.enabled = false;
-            rb.simulated = false;
-            speed = 0;
-
             //Make it fade
             for (int i = 0; i < 5; i++)
             {
@@ -85,9 +86,14 @@ public abstract class Enemy : MonoBehaviour
             playerController.GetComponent<PlayerController>().AddPoints(points);
 
         }
-
-        Debug.Log("Vidas del enemigo --> " + life);
-
+        else
+        {
+            //Volvemos a activar al enemigo
+            yield return new WaitForSeconds(0.5f);
+            col.enabled = true;
+            rb.simulated = true;
+            speed = oldSpeed;
+        }
     }
 
     /* Método RemoveLive */
