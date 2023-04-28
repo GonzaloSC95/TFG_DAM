@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,9 @@ public abstract class Enemy : MonoBehaviour
     protected PlayerController playerController;
     /* About hit */
     protected bool isHit;
-    
+    /* About max distance from the Player */
+    protected float maxDistance;
+
     /* Métodos Abstractos */
     /* Método OnHit */
     public abstract void OnHit();
@@ -100,5 +103,26 @@ public abstract class Enemy : MonoBehaviour
     public void RemoveLife(int life) {
 
         this.life -= life;
+    }
+
+    /* Método IsPlayerNearEnemy */
+    public bool IsPlayerNearEnemy()
+    {
+        //Si el player esta a una altura elevada el enemigo no le persigue 
+        float distanceY = (Math.Abs(transform.position.y) - Math.Abs(playerController.transform.position.y));
+        if (Math.Round(distanceY) != 0)
+        {
+            return false;
+        }
+        //Si el player no esta a una altura elevada y esta cerca respecto al eje x, el enemigo si le persigue 
+        float distanceX = (Math.Abs(transform.position.x) - Math.Abs(playerController.transform.position.x));
+        if (Math.Abs(distanceX) <= maxDistance)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

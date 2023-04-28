@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class PersecutionEnemy : Enemy
 {
-    /* Atributos */
-    private float maxDistance;
-
     /* Métodos */
     /* Método InicializarComponentes */
     public void InicializarComponentes()
@@ -20,14 +17,14 @@ public class PersecutionEnemy : Enemy
     { 
         base.Start();
         InicializarComponentes();
-        StartCoroutine(PersecutionEnemyLoop()); 
+        StartCoroutine(PersecutionLoop()); 
     }
     /* Método ProsecutionEnemyLoop*/
-    private IEnumerator PersecutionEnemyLoop()
+    private IEnumerator PersecutionLoop()
     {
         while (life > 0)
         {
-            if ((!isHit) && (GameManager.Instance.PlayerController.Life > 0))
+            if ((!isHit) && (playerController.Life > 0))
             {
                 switch ((IsPlayerNearEnemy()))
                 {
@@ -52,7 +49,7 @@ public class PersecutionEnemy : Enemy
         }
     }
     /* Método PerseguirPlayer*/
-    private void PerseguirPlayer()
+    public void PerseguirPlayer()
     {
         // Hacemos que el enemego vaya desde su posición hasta la del player
         transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, speed * Time.deltaTime);
@@ -66,19 +63,7 @@ public class PersecutionEnemy : Enemy
             rend.flipX = false;
         }
     }
-    /* Método IsPlayerNearEnemy */
-    private bool IsPlayerNearEnemy()
-    {
-        float distance = (Math.Abs(transform.position.x) - Math.Abs(playerController.transform.position.x));
-        if (Math.Abs(distance) <= maxDistance)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+ 
     /* Método OnHit */
     public override void OnHit()
     {

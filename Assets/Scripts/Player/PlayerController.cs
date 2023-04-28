@@ -127,18 +127,17 @@ public class PlayerController : MonoBehaviour
             {
                 if (Mathf.Abs(contact.normal.y) > 0.5f)
                 {
-                    //El player no pierde vida al saltar encima
+                    //El player no pierde vida al saltar encima del enemigo
                     ProcessEnemyHit(contact);
                     removeEnemyLife = true;
                 }
                 else if (Mathf.Abs(contact.normal.x) > 0.5f)
                 {
-                    //El player solo pierde vida si le dan por los lados encima
+                    //El player solo pierde vida si el enemigo le golpea por los lados
                     StartCoroutine(PlayerGotHit(contact));
                     removeEnemyLife = false;
                 }
             }
-
             if(removeEnemyLife)
             {
                 other.collider.GetComponent<Enemy>().RemoveLife(1);
@@ -151,16 +150,36 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Trap"))
         {
-            //El player solo pierde vida si cae encima
+            bool removePlayerLife = false;
+            //El player solo pierde vida si cae encima de la trampa
             foreach (ContactPoint2D contact in other.contacts)
             {
                 if (Vector3.Dot(contact.normal, Vector3.up) > 0.5f)
                 {
-                    // Aquí puedes reducir la vida del objeto receptor
-                    RemoveLife(1);
                     StartCoroutine(PlayerGotHit(contact));
-                    
+                    removePlayerLife = true;
                 }
+            }
+            if (removePlayerLife)
+            {
+                RemoveLife(1);
+                StartCoroutine(IsPlayerDie());
+            }
+
+        }
+        if (other.gameObject.CompareTag("TurtleTrap"))
+        {
+            bool removePlayerLife = false;
+            //El player pierde vida si choca con la trampa
+            foreach (ContactPoint2D contact in other.contacts)
+            {
+                StartCoroutine(PlayerGotHit(other.contacts[0]));
+                removePlayerLife = true;
+            }
+            if (removePlayerLife)
+            {
+                RemoveLife(1);
+                StartCoroutine(IsPlayerDie());
             }
         }
     }
@@ -231,6 +250,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /* Método IsPlayerDie */
     private IEnumerator IsPlayerDie()
     {
         if(life <= 0)
@@ -239,10 +259,10 @@ public class PlayerController : MonoBehaviour
             animationController.SetTrigger("Hit");
             StopParticleSystem();
             animationController.SetTrigger("Die");
-            yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.1f);
+            yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.75f);
             GameManager.Instance.UnsubsCribeObject(gameObject);
             //Si la vida llega a 0 reiniciamos la escena/juego
-            GameManager.Instance.Invoke("RestartScene", 3f);
+            GameManager.Instance.Invoke("RestartScene",3f);
         }
     }
 
@@ -305,6 +325,7 @@ public class PlayerController : MonoBehaviour
     {
         RemoveLife(life);
         StartCoroutine(PlayerGotHit(point));
+        StartCoroutine(IsPlayerDie());
     }
 
     /* Getters y Setters*/

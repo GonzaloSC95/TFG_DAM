@@ -44,13 +44,4 @@ public class TrapController : MonoBehaviour
             return false;
         }
     }
-    /* Método IsPlayerNearEnemy */
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if(other.gameObject.CompareTag("Player"))
-        {
-            other.gameObject.GetComponent<PlayerController>().PlayerIsHit(other.contacts[0]);
-        }
-        
-    }
 }
