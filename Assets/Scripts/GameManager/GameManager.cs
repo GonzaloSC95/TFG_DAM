@@ -51,6 +51,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    /* Método UnsubsCribeObject */
+    public void UnsubsCribeObject(GameObject obj)
+    {
+        obj.SetActive(false);
+    }
+
     /* Getters y Setters*/
     public static GameManager Instance { get => instance; }
     public WaitForEndOfFrame EndOfFrame { get => endOfFrame; }
