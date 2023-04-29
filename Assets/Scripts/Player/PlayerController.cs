@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /* Método Update */
-    void Update()
+    public void Update()
     {
         //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /* Método FixedUpdate */
-    void FixedUpdate(){
+    public void FixedUpdate(){
         //Si el estado actual del player es distinto de null, ejecutamos el método FixedTick
         currentState?.FixedTick();
         //De esta forma evitamos que el player atraviese el collider del grid

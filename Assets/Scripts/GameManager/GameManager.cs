@@ -10,13 +10,13 @@ public class GameManager : MonoBehaviour
     /* About Player */
     private static PlayerController playerController;
     /* About Text */
-    public  Text LifeText;
-    public  Text PointsText;
-    public  Image KeyImage;
-    private string lifePlayerText;
-    private string pointsPlayerText;
+    public Text LifeText;
+    public Text PointsText;
+    public Image KeyImage;
     /* About End of Frames*/
     private WaitForEndOfFrame endOfFrame;
+    /* About Main Camera */
+    private Camera mainCamera;
 
     /* Métodos */
     /* Método InicializarComponentes */
@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
         //Instanciamos un WaitForEndOfFrame
         endOfFrame = new WaitForEndOfFrame();
+        //Instanciamos la camara principal
+        mainCamera = Camera.main;
     }
     /* Método Awake */
     private void Awake()
@@ -39,11 +41,11 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        Debug.Log("GameManager is Operative--->"+ instance);
+        Debug.Log("GameManager is Operative--->" + instance);
         //Inicializamos los componentes
         InicializarComponentes();
     }
-    
+
     /* Método RestartScene */
     public void RestartScene()
     {
@@ -55,6 +57,21 @@ public class GameManager : MonoBehaviour
     public void UnsubsCribeObject(GameObject obj)
     {
         obj.SetActive(false);
+    }
+
+    /* Public GetifObjectIsoutOfMainCamera*/
+    public void UnsubsCribeObjectIsoutOfMainCamera(GameObject obj)
+    {
+        // Obtener las coordenadas normalizadas del objeto en la cámara
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(obj.transform.position);
+
+        // Verificar si las coordenadas normalizadas están fuera del rango (0,0) a (1,1)
+        if (viewportPos.x < 0 || viewportPos.x > 1 || viewportPos.y < 0 || viewportPos.y > 1)
+        {
+            Debug.Log("El objeto está fuera de la cámara");
+            UnsubsCribeObject(obj);
+            Destroy(obj);
+        }
     }
 
     /* Getters y Setters*/
@@ -76,12 +93,12 @@ public class GameManager : MonoBehaviour
     }
     public string LifePlayerText 
     {
-        get => lifePlayerText;
+        get => LifeText.text;
         set => LifeText.text = value;
     }
     public string PointsPlayerText
     {
-        get => pointsPlayerText;
+        get => PointsText.text;
         set => PointsText.text = value;
     }
     public GameObject KeyImg

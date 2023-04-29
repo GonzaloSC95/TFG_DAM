@@ -8,7 +8,7 @@ public class PatrolPersecutionEnemy : Enemy
 
     /* Métodos */
     /* Método InicializarComponentes */
-    public void InicializarComponentes()
+    private void InicializarComponentes()
     {
         direction = -Vector3.right;
         maxDistance = 2f;
@@ -47,7 +47,7 @@ public class PatrolPersecutionEnemy : Enemy
             
     }
     /* Método Patrol */
-    void Patrol()
+    private void Patrol()
     {
         tr.position += direction * (speed * Time.deltaTime);
         hit = Physics2D.Raycast((tr.position), direction, 2, groundLayer);
@@ -70,7 +70,7 @@ public class PatrolPersecutionEnemy : Enemy
         }
     }
     /* Método Persecution */
-    void Persecution()
+    private void Persecution()
     {
         // Hacemos que el enemego vaya desde su posición hasta la del player y aumentamos su velocidad
         transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, (speed * 2f) * Time.deltaTime);
