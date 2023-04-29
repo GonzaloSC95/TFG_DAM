@@ -168,6 +168,9 @@ MonoBehaviour:
   life: 2
   points: 25
   speed: 0
+  partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
+  partycleSystemRun: {fileID: 0}
+  canFly: 0
   firePoint: {fileID: 5453133019383016747}
   bulletPrefab: {fileID: 8311153735474244058, guid: ee2580ac6eef6cd468c21052206d78dc, type: 3}
 --- !u!1 &5453133019383016740

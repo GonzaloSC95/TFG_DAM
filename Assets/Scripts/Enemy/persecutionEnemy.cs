@@ -29,10 +29,12 @@ public class PersecutionEnemy : Enemy
                 switch ((IsPlayerNearEnemy()))
                 {
                     case true:
+                        StartParticleSystem(true);
                         anim.SetTrigger("walk");
                         PerseguirPlayer();
                         break;
                     case false:
+                        StopParticleSystem();
                         anim.SetTrigger("idle");
                         yield return new WaitUntil(() => !IsPlayerNearEnemy());
                         break;
@@ -40,6 +42,7 @@ public class PersecutionEnemy : Enemy
             }
             else
             {
+                StopParticleSystem();
                 anim.SetTrigger("idle");
                 isHit = false;
                 yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
@@ -51,16 +54,17 @@ public class PersecutionEnemy : Enemy
     /* Método PerseguirPlayer*/
     public void PerseguirPlayer()
     {
-        // Hacemos que el enemego vaya desde su posición hasta la del player
+        // Hacemos que el enemego vaya desde su posición hasta la del player y aumentamos su velocidad
         transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, speed * Time.deltaTime);
-        // Hacemos que la orientación del enemigo respecto a la del player, sea la adecuada
-        if(transform.position.x < playerController.transform.position.x)
+        // Ajustamos la dirección para que mire al jugador
+        Vector3 directionToPlayer = playerController.transform.position - transform.position;
+        if (directionToPlayer.x < 0)
         {
-            rend.flipX = true;
+            tr.localScale = new Vector3(1, 1, 1);
         }
         else
         {
-            rend.flipX = false;
+            tr.localScale = new Vector3(-1, 1, 1);
         }
     }
  

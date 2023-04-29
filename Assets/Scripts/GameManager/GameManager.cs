@@ -46,6 +46,12 @@ public class GameManager : MonoBehaviour
         InicializarComponentes();
     }
 
+    /* Método Update */
+    private void Update()
+    {
+        UnsubscribePartyCleSystems();
+    }
+
     /* Método RestartScene */
     public void RestartScene()
     {
@@ -59,7 +65,7 @@ public class GameManager : MonoBehaviour
         obj.SetActive(false);
     }
 
-    /* Public GetifObjectIsoutOfMainCamera*/
+    /* Public UnsubsCribeObjectIsoutOfMainCamera */
     public void UnsubsCribeObjectIsoutOfMainCamera(GameObject obj)
     {
         // Obtener las coordenadas normalizadas del objeto en la cámara
@@ -68,11 +74,27 @@ public class GameManager : MonoBehaviour
         // Verificar si las coordenadas normalizadas están fuera del rango (0,0) a (1,1)
         if (viewportPos.x < 0 || viewportPos.x > 1 || viewportPos.y < 0 || viewportPos.y > 1)
         {
-            Debug.Log("El objeto está fuera de la cámara");
             UnsubsCribeObject(obj);
             Destroy(obj);
         }
     }
+
+    /* Public UnsubsCribeParticleSystems */
+    public void UnsubscribePartyCleSystems()
+    {
+        GameObject[] partycleSystems = GameObject.FindGameObjectsWithTag("partycleSys");
+        if(partycleSystems.Length > 0)
+        {
+            foreach (GameObject obj in partycleSystems)
+            {
+                if (!obj.GetComponent<ParticleSystem>().isEmitting)
+                {
+                    Destroy(obj);
+                }
+            }
+        }
+    }
+
 
     /* Getters y Setters*/
     public static GameManager Instance { get => instance; }

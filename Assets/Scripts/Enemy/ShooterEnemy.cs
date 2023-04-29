@@ -7,6 +7,7 @@ public class ShooterEnemy : Enemy
     /* Atributos */
     [SerializeField] private Transform firePoint;
     public GameObject bulletPrefab;
+    public GameObject bullet;
     private float shootInterval = 1f;
     private float nextShootTime = 0f;
 
@@ -30,12 +31,12 @@ public class ShooterEnemy : Enemy
     {
         while (life > 0)
         {
+            LookAtPlayer();
             if ((!isHit) && ((playerController.Life > 0) && (playerController.gameObject.activeSelf)))
             {
                 if (IsPlayerNearEnemy())
                 {
                     anim.SetTrigger("attack");
-                    LookAtPlayer();
                     Shoot();
                 }
                 else
@@ -62,7 +63,8 @@ public class ShooterEnemy : Enemy
         if (IsPlayerNearEnemy() && (Time.time >= nextShootTime))
         {
             // Crear una instancia del prefab de bala en la posición del firePoint
-            Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            SetBulletDirecction();
             // Establecer el tiempo de espera para el siguiente disparo
             nextShootTime = Time.time + shootInterval;
         }
@@ -77,16 +79,37 @@ public class ShooterEnemy : Enemy
         if (directionToPlayer.x < 0)
         {
             tr.localScale = new Vector3(1, 1, 1);
-            bulletPrefab.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
         }
         else
         {
             tr.localScale = new Vector3(-1, 1, 1);
-            bulletPrefab.GetComponent<Transform>().localScale = new Vector3(-1, 1, 1);
+            
         }
     }
 
-   
+    /* Método SetBulletDirecction */
+    private void SetBulletDirecction()
+    {
+        Vector3 directionToPlayer = playerController.transform.position - transform.position;
+        if (directionToPlayer.x < 0)
+        {
+            if (bullet)
+            {
+                bullet.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
+                bullet.GetComponent<BulletController>().Direction = -Vector3.right;
+            }
+        }
+        else
+        {
+            if (bullet)
+            {
+                bullet.GetComponent<Transform>().localScale = new Vector3(-1, 1, 1);
+                bullet.GetComponent<BulletController>().Direction = Vector3.right;
+            }
+        }
+    }
+
+
     /* Método OnHit */
     public override void OnHit()
     {

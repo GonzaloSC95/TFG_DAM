@@ -168,6 +168,7 @@ MonoBehaviour:
   life: 5
   points: 50
   speed: 0.56
+  partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
 --- !u!1 &8417060182023966738
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +181,7 @@ GameObject:
   - component: {fileID: 8417060182023966749}
   - component: {fileID: 8417060182023966748}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: RunSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -194,7 +195,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8417060182023966738}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.185, y: -0.164, z: 0}
+  m_LocalPosition: {x: 0.197, y: -0.164, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8417060180955519273}
@@ -390,7 +391,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.9716981, g: 0.9579477, b: 0.9579477, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -453,7 +454,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.05
-      minScalar: 0.2
+      minScalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -836,7 +837,7 @@ ParticleSystem:
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
     m_Scale: {x: 0, y: 0, z: 0}
-    placementMode: 0
+    placementMode: 2
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
     m_MeshSpawn:
@@ -914,7 +915,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1
+      value: 0.05
       mode: 0
       spread: 0
       speed:
@@ -1648,7 +1649,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 2595048390531897671, guid: f2327ba2ad755d74682ebf3174417e5c, type: 3}
+    - sprite: {fileID: 21300000, guid: be517c18788c7044b8f1909b0f06d49a, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:

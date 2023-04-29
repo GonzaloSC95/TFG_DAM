@@ -15,6 +15,7 @@ TagManager:
   - Trap
   - End
   - TurtleTrap
+  - partycleSys
   layers:
   - Default
   - TransparentFX

@@ -6,6 +6,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     /* Atributos */
+    [SerializeField] private ParticleSystem particleSystemExplosion;
     private PlayerController playerController;
     private Vector3 direction;
     private float speed;
@@ -16,14 +17,12 @@ public class BulletController : MonoBehaviour
     {
         playerController = GameManager.Instance.PlayerController;
         tr = GetComponent<Transform>();
-        direction = -Vector3.right;
         speed = 0.6f;
     }
     /* Método Start */
     public void Start()
     {
         InicializarComponentes();
-        SetDirecction();
         StartCoroutine(OnShoot());
     }
     /* Método OnShoot */
@@ -37,20 +36,7 @@ public class BulletController : MonoBehaviour
             yield return GameManager.Instance.EndOfFrame;
         }     
     }
-    private void SetDirecction()
-    {
-        Vector3 directionToPlayer = playerController.transform.position - transform.position;
-        if (directionToPlayer.x < 0)
-        {
-            tr.localScale = new Vector3(1, 1, 1);
-            direction = -Vector3.right;
-        }
-        else
-        {
-            tr.localScale = new Vector3(-1, 1, 1);
-            direction = Vector3.right;
-        }
-    }
+  
     /* Método OnCollisionEnter2D */
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -60,13 +46,18 @@ public class BulletController : MonoBehaviour
             other.GetComponent<Rigidbody2D>().AddForce(Vector2.one*1.15f,ForceMode2D.Impulse);
             other.GetComponent<PlayerController>().PlayerIsHit(point,1);
             GameManager.Instance.UnsubsCribeObject(gameObject);
+            Instantiate(particleSystemExplosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
         if(other.gameObject.CompareTag("Ground"))
         {
             GameManager.Instance.UnsubsCribeObject(gameObject);
+            Instantiate(particleSystemExplosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
        
     }
+
+    /* Getters y Setters */
+    public Vector3 Direction { get => direction; set => direction = value; }
 }

@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private PlayerStates currentState;
     private PlayerStatesEnum currentStateEnum;
     [SerializeField] private Animator animationController;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private ParticleSystem particleSystemFeet;
+    [SerializeField] private ParticleSystem particleSystemDead;
     [SerializeField] private Transform playerFeet;
     private SpriteRenderer rend;
     private Transform tr;
@@ -91,21 +92,21 @@ public class PlayerController : MonoBehaviour
     public void StartParticleSystem(bool oneShot = false)
     {
         // Obtener el MainModule del ParticleSystem
-        ParticleSystem.MainModule main = particleSystem.main;
+        ParticleSystem.MainModule main = particleSystemFeet.main;
         main.loop = oneShot;
 
-        if(!particleSystem.isPlaying) 
+        if(!particleSystemFeet.isPlaying) 
         {
-            particleSystem.Play();
+            particleSystemFeet.Play();
         }
     }
 
     /* Método StopParticleSystem */
     public void StopParticleSystem(){
 
-        if(particleSystem.isPlaying) 
+        if(particleSystemFeet.isPlaying) 
         {
-            particleSystem.Stop();
+            particleSystemFeet.Stop();
         }
     }
 
@@ -258,8 +259,12 @@ public class PlayerController : MonoBehaviour
             //TODO: Sacar menu de reinicio
             animationController.SetTrigger("Hit");
             StopParticleSystem();
+            //Animación cuando el player muere
             animationController.SetTrigger("Die");
             yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.75f);
+            //Sistema de particulas cuando el player muere
+            Instantiate(particleSystemDead,tr.position,Quaternion.identity);
+            //El player desaparece de la escena
             GameManager.Instance.UnsubsCribeObject(gameObject);
             //Si la vida llega a 0 reiniciamos la escena/juego
             GameManager.Instance.Invoke("RestartScene",3f);

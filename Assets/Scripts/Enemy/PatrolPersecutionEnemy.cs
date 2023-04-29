@@ -29,17 +29,20 @@ public class PatrolPersecutionEnemy : Enemy
             {
                 if (!IsPlayerNearEnemy())
                 {
+                    StopParticleSystem();
                     anim.SetTrigger("walk");
                     Patrol();
                 }
                 else
                 {
                     anim.SetTrigger("run");
+                    StartParticleSystem(true);
                     Persecution();
                 }
             }
             else
             {
+                StopParticleSystem();
                 anim.SetTrigger("idle");
             }
             yield return GameManager.Instance.EndOfFrame;

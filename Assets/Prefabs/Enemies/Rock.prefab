@@ -167,3 +167,4 @@ MonoBehaviour:
   life: 2
   points: 25
   speed: 0.46
+  partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
