@@ -271,8 +271,8 @@ public class PlayerController : MonoBehaviour
             //El player desaparece de la escena
             GameManager.Instance.UnsubsCribeObject(gameObject);
             GameManager.Instance.PlaySound("gameover");
-            //Si la vida llega a 0 reiniciamos la escena/juego
-            GameManager.Instance.Invoke("RestartScene",3f);
+            //Si la vida llega a 0 salta el panel de Game Over
+            GameManager.Instance.Invoke("ActiveGameoverPanel", 2f);
         }
     }
 
@@ -304,8 +304,8 @@ public class PlayerController : MonoBehaviour
         //TODO: definir condiciones para la victoria del player y gestionar el cambio de escena
         if((life>0) && (PlayerHasKey))
         {
-            GameManager.Instance.PlaySound("win");
-            return;
+            //Si la vida llega a 0 salta el panel de Game Win
+            GameManager.Instance.Invoke("ActiveGameWinPanel", 2f);
         }
         Debug.Log("Necesitas estar en posesión de la llave y " +
             "abrir el cofre para poder pasar al siguiente nivel :(");

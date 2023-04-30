@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -13,6 +12,9 @@ public class GameManager : MonoBehaviour
     public Text LifeText;
     public Text PointsText;
     public Image KeyImage;
+    /* About UI */
+    public GameObject gameOverPanel;
+    public GameObject gameWinPanel;
     /* About End of Frames*/
     private WaitForEndOfFrame endOfFrame;
     /* About Main Camera */
@@ -57,14 +59,8 @@ public class GameManager : MonoBehaviour
     /* Método Update */
     private void Update()
     {
+        //Borrar todos los sistemas de particulas inactivos
         UnsubscribePartyCleSystems();
-    }
-
-    /* Método RestartScene */
-    public void RestartScene()
-    {
-        //Método para reiniciar la escena
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     /* Método UnsubsCribeObject */
@@ -91,7 +87,7 @@ public class GameManager : MonoBehaviour
     public void UnsubscribePartyCleSystems()
     {
         GameObject[] partycleSystems = GameObject.FindGameObjectsWithTag("partycleSys");
-        if(partycleSystems.Length > 0)
+        if (partycleSystems.Length > 0)
         {
             foreach (GameObject obj in partycleSystems)
             {
@@ -101,6 +97,18 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    /* Método ActiveGameoverPanel */
+    public void ActiveGameoverPanel()
+    {
+        gameOverPanel.SetActive(true);
+    }
+
+    /* Método ActiveGameoverPanel */
+    public void ActiveGameWinPanel()
+    {
+        gameWinPanel.SetActive(true);
     }
 
     /* Método PlaySound */

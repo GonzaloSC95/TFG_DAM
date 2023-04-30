@@ -47,6 +47,8 @@ MonoBehaviour:
   LifeText: {fileID: 0}
   PointsText: {fileID: 0}
   KeyImage: {fileID: 0}
+  gameOverPanel: {fileID: 0}
+  gameWinPanel: {fileID: 0}
   gameOverAudio: {fileID: 8300000, guid: 8c404361060d2af449eef723acb1fc92, type: 3}
   killEnemyAudio: {fileID: 8300000, guid: 0150562574293514dbe5dc164838b635, type: 3}
   boomAudio: {fileID: 8300000, guid: addaff367593f0940a80f8cc2ea0bbbe, type: 3}

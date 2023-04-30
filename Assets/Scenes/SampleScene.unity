@@ -178,10 +178,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: End
       objectReference: {fileID: 0}
-    - target: {fileID: 7085902254229786455, guid: cb126313c0884c24f861c4ce63c5c031, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb126313c0884c24f861c4ce63c5c031, type: 3}
 --- !u!1001 &92509222
@@ -397,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &165774529
 Transform:
   m_ObjectHideFlags: 0
@@ -1531,6 +1527,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b247c56e908e3446933b82d0d6a87f6, type: 3}
+--- !u!1 &683555164 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 683555164, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+  m_PrefabInstance: {fileID: 1609142413}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,6 +1835,14 @@ PrefabInstance:
       propertyPath: PointsText
       value: 
       objectReference: {fileID: 1977869559}
+    - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
+      propertyPath: gameWinPanel
+      value: 
+      objectReference: {fileID: 683555164}
+    - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
+      propertyPath: gameOverPanel
+      value: 
+      objectReference: {fileID: 2084606235}
     - target: {fileID: 5415882700228423095, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -2179,7 +2188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4918914337598065089, guid: 319842d1b588d8e4088e12cf4ae37c7b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4918914337598065090, guid: 319842d1b588d8e4088e12cf4ae37c7b, type: 3}
       propertyPath: m_RootOrder
@@ -2654,6 +2663,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2084606235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2084606235, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+  m_PrefabInstance: {fileID: 1609142413}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &481621309870908222
 PrefabInstance:
   m_ObjectHideFlags: 0
