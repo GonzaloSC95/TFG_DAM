@@ -16,6 +16,10 @@ TagManager:
   - End
   - TurtleTrap
   - partycleSys
+  - Apple
+  - Banana
+  - Orange
+  - Pineapple
   layers:
   - Default
   - TransparentFX

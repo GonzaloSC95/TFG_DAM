@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     private WaitForEndOfFrame endOfFrame;
     /* About Main Camera */
     private Camera mainCamera;
+    /* About Sounds */
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip gameOverAudio;
+    [SerializeField] private AudioClip killEnemyAudio;
+    [SerializeField] private AudioClip boomAudio;
 
     /* Métodos */
     /* Método InicializarComponentes */
@@ -28,6 +33,8 @@ public class GameManager : MonoBehaviour
         endOfFrame = new WaitForEndOfFrame();
         //Instanciamos la camara principal
         mainCamera = Camera.main;
+        //Instanciamos el componente Audio Source
+        audioSource = GetComponent<AudioSource>();
     }
     /* Método Awake */
     private void Awake()
@@ -92,6 +99,23 @@ public class GameManager : MonoBehaviour
                     Destroy(obj);
                 }
             }
+        }
+    }
+
+    /* Método PlaySound */
+    public void PlaySound(string sound)
+    { 
+        switch(sound)
+        {
+            case "gameover":
+                audioSource.PlayOneShot(gameOverAudio);
+                break;
+            case "killenemy":
+                audioSource.PlayOneShot(killEnemyAudio);
+                break;
+            case "boom":
+                audioSource.PlayOneShot(boomAudio);
+                break;
         }
     }
 

@@ -64,6 +64,7 @@ public class ShooterEnemy : Enemy
         {
             // Crear una instancia del prefab de bala en la posición del firePoint
             bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+            GameManager.Instance.PlaySound("boom");
             SetBulletDirecction();
             // Establecer el tiempo de espera para el siguiente disparo
             nextShootTime = Time.time + shootInterval;

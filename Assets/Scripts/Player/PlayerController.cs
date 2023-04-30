@@ -30,9 +30,12 @@ public class PlayerController : MonoBehaviour
     private bool playerHasKey = false;
     //About Sounds
     private AudioSource audioSourcePlayer;
-    public AudioClip CollectSound;
-    public AudioClip jumpSound;
-    
+    [SerializeField] private AudioClip collectSound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip lifeSound;
+    [SerializeField] private AudioClip keySound;
+    [SerializeField] private AudioClip onHitSound;
+    [SerializeField] private AudioClip onHitEnemy;
 
     /* Métodos */
     /* Método Awake*/
@@ -212,6 +215,7 @@ public class PlayerController : MonoBehaviour
         {
             Rb.AddForce(((point.normal) + (Vector2.up))*1.25f, ForceMode2D.Impulse);
             hit.collider.GetComponent<Enemy>().OnHit();
+            PlaySound("hitenemy");
         }
     }
 
@@ -225,7 +229,7 @@ public class PlayerController : MonoBehaviour
         if (life > 0)
         {
             animationController.SetTrigger("Hit");
-
+            PlaySound("hit");
             for (float i = 0; i < invulTime;)
             {
 
@@ -266,6 +270,7 @@ public class PlayerController : MonoBehaviour
             Instantiate(particleSystemDead,tr.position,Quaternion.identity);
             //El player desaparece de la escena
             GameManager.Instance.UnsubsCribeObject(gameObject);
+            GameManager.Instance.PlaySound("gameover");
             //Si la vida llega a 0 reiniciamos la escena/juego
             GameManager.Instance.Invoke("RestartScene",3f);
         }
@@ -311,16 +316,22 @@ public class PlayerController : MonoBehaviour
         switch(sound)
         {
             case "fruit":
-                audioSourcePlayer.PlayOneShot(CollectSound);
+                audioSourcePlayer.PlayOneShot(collectSound);
             break;
             case "jump":
                 audioSourcePlayer.PlayOneShot(jumpSound);
                 break;
             case "key":
-                audioSourcePlayer.PlayOneShot(CollectSound); 
+                audioSourcePlayer.PlayOneShot(keySound); 
                 break;
             case "life":
-                audioSourcePlayer.PlayOneShot(CollectSound);
+                audioSourcePlayer.PlayOneShot(lifeSound);
+                break;
+            case "hit":
+                audioSourcePlayer.PlayOneShot(onHitSound);
+                break;
+            case "hitenemy":
+                audioSourcePlayer.PlayOneShot(onHitEnemy);
                 break;
         }
     }

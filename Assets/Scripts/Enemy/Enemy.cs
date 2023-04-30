@@ -88,10 +88,12 @@ public abstract class Enemy : MonoBehaviour
                     yield return GameManager.Instance.EndOfFrame;
                 }
             }
-            //Hacemos que el enemigo desparezac de la escena
+            //Hacemos que el enemigo desparezaca de la escena
             GameManager.Instance.UnsubsCribeObject(gameObject);
             //Instanciamos su sistema de particulas
             Instantiate(partycleSystemDead, tr.position, Quaternion.identity);
+            //Emitimos el sonido correspondiente
+            GameManager.Instance.PlaySound("killenemy");
             // Le sumamos los puntos al jugador por matar al enemigo
             playerController.GetComponent<PlayerController>().AddPoints(points);
 

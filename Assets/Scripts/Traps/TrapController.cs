@@ -8,11 +8,13 @@ public class TrapController : MonoBehaviour
     private float maxDistance;
     private PlayerController playerController;
     private Animator anim;
+    private AudioSource audio;
 
     /* Métodos */
     public void InicializarComponentes()
     {
         playerController = GameManager.Instance.PlayerController;
+        audio = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         maxDistance = 2f;
     }
@@ -30,6 +32,11 @@ public class TrapController : MonoBehaviour
             anim.SetBool("pinchos", IsPlayerNearTrap());
             yield return GameManager.Instance.EndOfFrame;
         }
+    }
+    /* Método Update */
+    private void PlaySound()
+    {
+        audio.Play();
     }
     /* Método IsPlayerNearEnemy */
     private bool IsPlayerNearTrap()

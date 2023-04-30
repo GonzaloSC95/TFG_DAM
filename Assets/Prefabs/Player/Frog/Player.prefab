@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4363064108012145287}
   - component: {fileID: 4363064108012145284}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: SmokeFeet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4863,7 +4863,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4363064108576931428}
-  m_LocalRotation: {x: -0, y: -0.29903826, z: -0, w: 0.95424116}
+  m_LocalRotation: {x: 0, y: -0.29904068, z: 0, w: 0.9542404}
   m_LocalPosition: {x: -1.304, y: 1.737, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5098,7 +5098,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationController: {fileID: 4363064108576931431}
-  particleSystem: {fileID: 4363064108012145287}
+  particleSystemFeet: {fileID: 4363064108012145287}
+  particleSystemDead: {fileID: 7424073699824579849, guid: 31041f3904c97b5428f2a73662cfc5ed, type: 3}
   playerFeet: {fileID: 4363064108324375749}
-  CollectSound: {fileID: 8300000, guid: 3ac98a5a737070e4cbd2163156186a8f, type: 3}
+  collectSound: {fileID: 8300000, guid: 3ac98a5a737070e4cbd2163156186a8f, type: 3}
   jumpSound: {fileID: 8300000, guid: 41e8c20b6975e844ea7a1afb8c21f763, type: 3}
+  lifeSound: {fileID: 8300000, guid: 8d48e53ba88095f4fb5c956d44b66813, type: 3}
+  keySound: {fileID: 8300000, guid: 15ac9a7e62f8732448ff9e66702d0499, type: 3}
+  onHitSound: {fileID: 8300000, guid: 0163388027b709f458cea9cb23ed54ad, type: 3}
+  onHitEnemy: {fileID: 8300000, guid: 017f9b6cdd3401d42bd7eac3a2e3bbb2, type: 3}

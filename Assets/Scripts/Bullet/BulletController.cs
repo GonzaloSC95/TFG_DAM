@@ -42,6 +42,7 @@ public class BulletController : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
+            GameManager.Instance.PlaySound("boom");
             ContactPoint2D point = new ContactPoint2D();
             other.GetComponent<Rigidbody2D>().AddForce(Vector2.one*1.15f,ForceMode2D.Impulse);
             other.GetComponent<PlayerController>().PlayerIsHit(point,1);
@@ -50,7 +51,8 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject);
         }
         if(other.gameObject.CompareTag("Ground"))
-        {
+        { 
+            GameManager.Instance.PlaySound("boom");
             GameManager.Instance.UnsubsCribeObject(gameObject);
             Instantiate(particleSystemExplosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
