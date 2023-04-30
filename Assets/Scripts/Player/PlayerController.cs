@@ -304,10 +304,11 @@ public class PlayerController : MonoBehaviour
         //TODO: definir condiciones para la victoria del player y gestionar el cambio de escena
         if((life>0) && (PlayerHasKey))
         {
-            Debug.Log("El Player ha ganado");
+            GameManager.Instance.PlaySound("win");
             return;
         }
-        Debug.Log("El Player AUN NO ha ganado");
+        Debug.Log("Necesitas estar en posesión de la llave y " +
+            "abrir el cofre para poder pasar al siguiente nivel :(");
     }
 
     /* Método PlaySounds */

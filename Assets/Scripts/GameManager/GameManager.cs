@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip gameOverAudio;
     [SerializeField] private AudioClip killEnemyAudio;
     [SerializeField] private AudioClip boomAudio;
+    [SerializeField] private AudioClip winGameAudio;
 
     /* Métodos */
     /* Método InicializarComponentes */
@@ -115,6 +116,9 @@ public class GameManager : MonoBehaviour
                 break;
             case "boom":
                 audioSource.PlayOneShot(boomAudio);
+                break;
+            case "win":
+                audioSource.PlayOneShot(winGameAudio);
                 break;
         }
     }

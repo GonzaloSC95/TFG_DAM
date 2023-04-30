@@ -29,7 +29,6 @@ public class CheckPointController : MonoBehaviour
         if ((other.gameObject.CompareTag("Player")) && (IsEnd))
         {
             //Aqui se controla la vitoria del Player
-            //other.gameObject.GetComponent<PlayerController>().PlaySound("Win"); TODO
             other.gameObject.GetComponent<PlayerController>().PlayerWin();
             SpriteRenderer.sortingOrder = backOrderInlayer;
         }
