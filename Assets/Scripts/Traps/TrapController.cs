@@ -41,7 +41,7 @@ public class TrapController : MonoBehaviour
     /* Método IsPlayerNearEnemy */
     private bool IsPlayerNearTrap()
     {
-        if (playerController.Life <= 0) return false;
+        if (playerController.Life <= 0 || playerController.IsPlayerWinner == true) return false;
         float distance = (Math.Abs(transform.position.x) - Math.Abs(playerController.transform.position.x));
         if (Math.Abs(distance) <= maxDistance)
         {

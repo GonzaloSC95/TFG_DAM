@@ -7,7 +7,7 @@ public class ShooterEnemy : Enemy
     /* Atributos */
     [SerializeField] private Transform firePoint;
     public GameObject bulletPrefab;
-    public GameObject bullet;
+    private GameObject bullet;
     private float shootInterval = 1f;
     private float nextShootTime = 0f;
 

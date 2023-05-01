@@ -80206,10 +80206,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11288307028283317, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
       propertyPath: m_Name
-      value: CanvasManager
+      value: Canvas Manager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+--- !u!1 &11288307920807906 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 683555164, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+  m_PrefabInstance: {fileID: 11288307920807905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &11288307920807907 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2084606235, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+  m_PrefabInstance: {fileID: 11288307920807905}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &148158821925047349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80817,7 +80827,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5415882700228423089, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
       propertyPath: m_Name
-      value: Manager
+      value: Game Manager
       objectReference: {fileID: 0}
     - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
       propertyPath: KeyImage
@@ -80831,6 +80841,14 @@ PrefabInstance:
       propertyPath: PointsText
       value: 
       objectReference: {fileID: 462818113}
+    - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
+      propertyPath: gameWinPanel
+      value: 
+      objectReference: {fileID: 11288307920807906}
+    - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
+      propertyPath: gameOverPanel
+      value: 
+      objectReference: {fileID: 11288307920807907}
     - target: {fileID: 5415882700228423095, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
       propertyPath: m_RootOrder
       value: 0

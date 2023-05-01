@@ -170,6 +170,8 @@ MonoBehaviour:
   speed: 0.9
   partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
   partycleSystemRun: {fileID: 9093613161505874080}
+  canFly: 0
+  lifePrefab: {fileID: 1887201759438372099, guid: 849b4b43635d53f40956bb8c759affb1, type: 3}
 --- !u!1001 &136505508
 PrefabInstance:
   m_ObjectHideFlags: 0

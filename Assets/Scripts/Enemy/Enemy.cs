@@ -31,6 +31,8 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private ParticleSystem partycleSystemRun;
     /* About flying enemies */
     public bool canFly;
+    /* About lifes for Player */
+    public GameObject lifePrefab;
 
     /* Métodos Abstractos */
     /* Método OnHit */
@@ -94,6 +96,7 @@ public abstract class Enemy : MonoBehaviour
             Instantiate(partycleSystemDead, tr.position, Quaternion.identity);
             //Emitimos el sonido correspondiente
             GameManager.Instance.PlaySound("killenemy");
+            GiveLifeToPlayer();
             // Le sumamos los puntos al jugador por matar al enemigo
             playerController.GetComponent<PlayerController>().AddPoints(points);
 
@@ -164,5 +167,25 @@ public abstract class Enemy : MonoBehaviour
                 partycleSystemRun.Stop();
             }
         }
+    }
+
+    /* Método GiveLifeToPlayer */
+    public void GiveLifeToPlayer()
+    {
+        int randomNum, maxRange;
+        if (speed >= 0.6)
+        {
+            maxRange = 2;
+        }
+        else
+        { 
+            maxRange = 11; 
+        }
+        randomNum = UnityEngine.Random.Range(0, maxRange);
+        if((randomNum == 1) && (lifePrefab))
+        {
+            Instantiate(lifePrefab, transform.position, Quaternion.identity);
+        }
+
     }
 }

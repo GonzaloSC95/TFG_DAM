@@ -991,7 +991,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 724960768}
         m_TargetAssemblyTypeName: CanvasController, Assembly-CSharp
-        m_MethodName: RestartScene
+        m_MethodName: LoadNextScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2138,7 +2138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3577983671ad5b4694a6f22285c024f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Scenes: []
 --- !u!1 &11288307452699299
 GameObject:
   m_ObjectHideFlags: 0
