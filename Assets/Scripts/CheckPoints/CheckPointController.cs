@@ -39,6 +39,7 @@ public class CheckPointController : MonoBehaviour
         if ((other.gameObject.CompareTag("Player")) && (IsEnd))
         {
             SpriteRenderer.sortingOrder = InitialOrderInlayer;
+            GameManager.Instance.ActiveAlertPanel(false);
         }
     }
 }

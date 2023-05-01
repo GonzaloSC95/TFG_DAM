@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     /* About UI */
     public GameObject gameOverPanel;
     public GameObject gameWinPanel;
+    public GameObject alertPanel;
     /* About End of Frames*/
     private WaitForEndOfFrame endOfFrame;
     /* About Main Camera */
@@ -109,6 +110,12 @@ public class GameManager : MonoBehaviour
     public void ActiveGameWinPanel()
     {
         gameWinPanel.SetActive(true);
+    }
+
+    /* Método ActiveAlertPanel */
+    public void ActiveAlertPanel(bool active)
+    {
+        alertPanel.SetActive(active);
     }
 
     /* Método PlaySound */

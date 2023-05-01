@@ -80072,13 +80072,13 @@ Transform:
   - {fileID: 1392360042}
   - {fileID: 1137895782}
   - {fileID: 2119690724}
+  - {fileID: 803258852}
   - {fileID: 911574236}
-  - {fileID: 530199325}
   - {fileID: 1209799794}
   - {fileID: 1416709613}
-  - {fileID: 803258852}
-  - {fileID: 832718159}
   - {fileID: 1613339270}
+  - {fileID: 530199325}
+  - {fileID: 832718159}
   - {fileID: 2031469313}
   - {fileID: 1327848164}
   m_Father: {fileID: 0}
@@ -80429,6 +80429,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5668322494919894749, guid: f77a1f65040bcdc4dabe96e101d33a33, type: 3}
   m_PrefabInstance: {fileID: 1392360041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1416217802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1416217802, guid: 6bff20d7775fadd4cb280650b41b8029, type: 3}
+  m_PrefabInstance: {fileID: 11288307920807905}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1416709612
 PrefabInstance:
@@ -81902,6 +81907,10 @@ PrefabInstance:
       propertyPath: PointsText
       value: 
       objectReference: {fileID: 462818113}
+    - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
+      propertyPath: alertPanel
+      value: 
+      objectReference: {fileID: 1416217802}
     - target: {fileID: 5415882700228423094, guid: 5408f4c48fbd724408e338f4156adf28, type: 3}
       propertyPath: gameWinPanel
       value: 

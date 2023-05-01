@@ -313,8 +313,11 @@ public class PlayerController : MonoBehaviour
             playerWin = true;
             GameManager.Instance.Invoke("ActiveGameWinPanel", 1f);
         }
-        Debug.Log("Necesitas estar en posesión de la llave y " +
-            "abrir el cofre para poder pasar al siguiente nivel :(");
+        else
+        {
+            GameManager.Instance.ActiveAlertPanel(true);
+        }
+        
     }
 
     /* Método PlaySounds */
