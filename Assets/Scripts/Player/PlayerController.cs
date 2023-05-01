@@ -213,11 +213,14 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast((playerFeet.position), -Tr.up, 1);
 
-        if (hit.collider.CompareTag("Enemy"))
+        if(hit)
         {
-            Rb.AddForce(((point.normal) + (Vector2.up))*1.25f, ForceMode2D.Impulse);
-            hit.collider.GetComponent<Enemy>().OnHit();
-            PlaySound("hitenemy");
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                Rb.AddForce(((point.normal) + (Vector2.up)) * 1.25f, ForceMode2D.Impulse);
+                hit.collider.GetComponent<Enemy>().OnHit();
+                PlaySound("hitenemy");
+            }
         }
     }
 
