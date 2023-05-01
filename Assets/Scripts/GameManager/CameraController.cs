@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
     /* Método Awake */
     private void Awake()
     {
-        GameManager.instance.CameraControllerInstance=this;
+        GameManager.Instance.CameraControllerInstance = this;
     }
     /* Método Update */
     void Update()

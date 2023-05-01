@@ -3,57 +3,71 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class persecutionEnemy : Enemy
+public class PersecutionEnemy : Enemy
 {
-    /* Atributos */
-    private float maxDistance = 2f;
-
     /* Métodos */
-    /* Método FixedUpdate */
-    void FixedUpdate()
+    /* Método InicializarComponentes */
+    public void InicializarComponentes()
     {
-        // Si el player esta cerca le perseguimos
-        if (IsPlayerNearEnemy())
+        //Distancia a la que el enemigo detecta al Player
+        maxDistance = 2f;
+    }
+    /* Método Start */
+    public override void Start() 
+    { 
+        base.Start();
+        InicializarComponentes();
+        StartCoroutine(PersecutionLoop()); 
+    }
+    /* Método ProsecutionEnemyLoop*/
+    private IEnumerator PersecutionLoop()
+    {
+        while (life > 0)
         {
-            PerseguirPlayer();
-        }
-        else
-        {
-            anim.SetTrigger("Idle");
+            if ((!isHit) && (playerController.Life > 0))
+            {
+                switch ((IsPlayerNearEnemy()))
+                {
+                    case true:
+                        StartParticleSystem(true);
+                        anim.SetTrigger("walk");
+                        PerseguirPlayer();
+                        break;
+                    case false:
+                        StopParticleSystem();
+                        anim.SetTrigger("idle");
+                        yield return new WaitUntil(() => !IsPlayerNearEnemy());
+                        break;
+                }
+            }
+            else
+            {
+                StopParticleSystem();
+                anim.SetTrigger("idle");
+                isHit = false;
+                yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+                
+            }
+            yield return GameManager.Instance.EndOfFrame;
         }
     }
-
     /* Método PerseguirPlayer*/
-    private void PerseguirPlayer()
+    public void PerseguirPlayer()
     {
-        // Hacemos que el enemego vaya desde su posición hasta la del player
-        anim.SetTrigger("Walk");
+        // Hacemos que el enemego vaya desde su posición hasta la del player y aumentamos su velocidad
         transform.position = Vector3.MoveTowards(transform.position, playerController.transform.position, speed * Time.deltaTime);
-        // Hacemos que la orientación del enemigo respecto a la del player, sea la adecuada
-        if(transform.position.x < playerController.transform.position.x)
+        // Ajustamos la dirección para que mire al jugador
+        Vector3 directionToPlayer = playerController.transform.position - transform.position;
+        if (directionToPlayer.x < 0)
         {
-            rend.flipX = true;
+            tr.localScale = new Vector3(1, 1, 1);
         }
         else
         {
-            rend.flipX = false;
+            tr.localScale = new Vector3(-1, 1, 1);
         }
     }
-
-    /* Método IsPlayerNearEnemy */
-    private bool IsPlayerNearEnemy()
-    {
-        float distance = (Math.Abs(transform.position.x) - Math.Abs(playerController.transform.position.x));
-        if (Math.Abs(distance) <= maxDistance)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
+ 
     /* Método OnHit */
     public override void OnHit()
     {
