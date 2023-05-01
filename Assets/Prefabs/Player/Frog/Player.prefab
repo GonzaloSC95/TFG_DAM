@@ -5106,4 +5106,5 @@ MonoBehaviour:
   lifeSound: {fileID: 8300000, guid: 8d48e53ba88095f4fb5c956d44b66813, type: 3}
   keySound: {fileID: 8300000, guid: 15ac9a7e62f8732448ff9e66702d0499, type: 3}
   onHitSound: {fileID: 8300000, guid: 0163388027b709f458cea9cb23ed54ad, type: 3}
-  onHitEnemy: {fileID: 8300000, guid: 017f9b6cdd3401d42bd7eac3a2e3bbb2, type: 3}
+  onHitEnemySound: {fileID: 8300000, guid: 017f9b6cdd3401d42bd7eac3a2e3bbb2, type: 3}
+  winSound: {fileID: 8300000, guid: 5343d22b266cca24cb36bea874a3cb1b, type: 3}

@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip lifeSound;
     [SerializeField] private AudioClip keySound;
     [SerializeField] private AudioClip onHitSound;
-    [SerializeField] private AudioClip onHitEnemy;
+    [SerializeField] private AudioClip onHitEnemySound;
+    [SerializeField] private AudioClip winSound;
 
     /* Métodos */
     /* Método Awake*/
@@ -305,6 +306,7 @@ public class PlayerController : MonoBehaviour
         if((life>0) && (PlayerHasKey))
         {
             //Si la vida llega a 0 salta el panel de Game Win
+            PlaySound("win");
             playerWin = true;
             GameManager.Instance.Invoke("ActiveGameWinPanel", 1f);
         }
@@ -333,7 +335,10 @@ public class PlayerController : MonoBehaviour
                 audioSourcePlayer.PlayOneShot(onHitSound);
                 break;
             case "hitenemy":
-                audioSourcePlayer.PlayOneShot(onHitEnemy);
+                audioSourcePlayer.PlayOneShot(onHitEnemySound);
+                break;
+            case "win":
+                audioSourcePlayer.PlayOneShot(winSound);
                 break;
         }
     }
