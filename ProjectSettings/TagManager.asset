@@ -14,6 +14,12 @@ TagManager:
   - Life
   - Trap
   - End
+  - TurtleTrap
+  - partycleSys
+  - Apple
+  - Banana
+  - Orange
+  - Pineapple
   layers:
   - Default
   - TransparentFX

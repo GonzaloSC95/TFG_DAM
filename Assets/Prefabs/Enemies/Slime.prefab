@@ -168,6 +168,10 @@ MonoBehaviour:
   life: 1
   points: 20
   speed: 0.46
+  partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
+  partycleSystemRun: {fileID: 0}
+  canFly: 0
+  lifePrefab: {fileID: 1887201759438372099, guid: 849b4b43635d53f40956bb8c759affb1, type: 3}
 --- !u!1 &3992705209476023122
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +184,7 @@ GameObject:
   - component: {fileID: 3992705209476023133}
   - component: {fileID: 3992705209476023132}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: RunSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

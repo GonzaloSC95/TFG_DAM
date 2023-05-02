@@ -52,6 +52,18 @@ public class FruitController : MonoBehaviour
             case "Kiwi":
                 points = 10;
                 break;
+            case "Apple":
+                points = 15;
+                break;
+            case "Banana":
+                points = 20;
+                break;
+            case "Pineapple":
+                points = 35;
+                break;
+            case "Orange":
+                points = 25;
+                break;
             default:
                 points = 5;
                 break;

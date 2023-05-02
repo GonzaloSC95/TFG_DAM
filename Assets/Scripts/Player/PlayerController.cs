@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private PlayerStates currentState;
     private PlayerStatesEnum currentStateEnum;
     [SerializeField] private Animator animationController;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private ParticleSystem particleSystemFeet;
+    [SerializeField] private ParticleSystem particleSystemDead;
     [SerializeField] private Transform playerFeet;
     private SpriteRenderer rend;
     private Transform tr;
@@ -27,11 +28,16 @@ public class PlayerController : MonoBehaviour
     private int points = 0;
     // About Cofre key
     private bool playerHasKey = false;
+    private bool playerWin = false;
     //About Sounds
     private AudioSource audioSourcePlayer;
-    public AudioClip CollectSound;
-    public AudioClip jumpSound;
-    
+    [SerializeField] private AudioClip collectSound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip lifeSound;
+    [SerializeField] private AudioClip keySound;
+    [SerializeField] private AudioClip onHitSound;
+    [SerializeField] private AudioClip onHitEnemySound;
+    [SerializeField] private AudioClip winSound;
 
     /* Métodos */
     /* Método Awake*/
@@ -62,7 +68,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /* Método Update */
-    void Update()
+    public void Update()
     {
         //Si el estado actual del player es distinto de null, ejecutamos el método Tick
         currentState?.Tick();
@@ -71,7 +77,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /* Método FixedUpdate */
-    void FixedUpdate(){
+    public void FixedUpdate(){
         //Si el estado actual del player es distinto de null, ejecutamos el método FixedTick
         currentState?.FixedTick();
         //De esta forma evitamos que el player atraviese el collider del grid
@@ -91,21 +97,21 @@ public class PlayerController : MonoBehaviour
     public void StartParticleSystem(bool oneShot = false)
     {
         // Obtener el MainModule del ParticleSystem
-        ParticleSystem.MainModule main = particleSystem.main;
+        ParticleSystem.MainModule main = particleSystemFeet.main;
         main.loop = oneShot;
 
-        if(!particleSystem.isPlaying) 
+        if(!particleSystemFeet.isPlaying) 
         {
-            particleSystem.Play();
+            particleSystemFeet.Play();
         }
     }
 
     /* Método StopParticleSystem */
     public void StopParticleSystem(){
 
-        if(particleSystem.isPlaying) 
+        if(particleSystemFeet.isPlaying) 
         {
-            particleSystem.Stop();
+            particleSystemFeet.Stop();
         }
     }
 
@@ -127,18 +133,17 @@ public class PlayerController : MonoBehaviour
             {
                 if (Mathf.Abs(contact.normal.y) > 0.5f)
                 {
-                    //El player no pierde vida al saltar encima
+                    //El player no pierde vida al saltar encima del enemigo
                     ProcessEnemyHit(contact);
                     removeEnemyLife = true;
                 }
                 else if (Mathf.Abs(contact.normal.x) > 0.5f)
                 {
-                    //El player solo pierde vida si le dan por los lados encima
+                    //El player solo pierde vida si el enemigo le golpea por los lados
                     StartCoroutine(PlayerGotHit(contact));
                     removeEnemyLife = false;
                 }
             }
-
             if(removeEnemyLife)
             {
                 other.collider.GetComponent<Enemy>().RemoveLife(1);
@@ -151,16 +156,36 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Trap"))
         {
-            //El player solo pierde vida si cae encima
+            bool removePlayerLife = false;
+            //El player solo pierde vida si cae encima de la trampa
             foreach (ContactPoint2D contact in other.contacts)
             {
                 if (Vector3.Dot(contact.normal, Vector3.up) > 0.5f)
                 {
-                    // Aquí puedes reducir la vida del objeto receptor
-                    RemoveLife(1);
                     StartCoroutine(PlayerGotHit(contact));
-                    
+                    removePlayerLife = true;
                 }
+            }
+            if (removePlayerLife)
+            {
+                RemoveLife(1);
+                StartCoroutine(IsPlayerDie());
+            }
+
+        }
+        if (other.gameObject.CompareTag("TurtleTrap"))
+        {
+            bool removePlayerLife = false;
+            //El player pierde vida si choca con la trampa
+            foreach (ContactPoint2D contact in other.contacts)
+            {
+                StartCoroutine(PlayerGotHit(other.contacts[0]));
+                removePlayerLife = true;
+            }
+            if (removePlayerLife)
+            {
+                RemoveLife(1);
+                StartCoroutine(IsPlayerDie());
             }
         }
     }
@@ -188,10 +213,14 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast((playerFeet.position), -Tr.up, 1);
 
-        if (hit.collider.CompareTag("Enemy"))
+        if(hit)
         {
-            Rb.AddForce(((point.normal) + (Vector2.up))*1.25f, ForceMode2D.Impulse);
-            hit.collider.GetComponent<Enemy>().OnHit();
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                Rb.AddForce(((point.normal) + (Vector2.up)) * 1.25f, ForceMode2D.Impulse);
+                hit.collider.GetComponent<Enemy>().OnHit();
+                PlaySound("hitenemy");
+            }
         }
     }
 
@@ -205,7 +234,7 @@ public class PlayerController : MonoBehaviour
         if (life > 0)
         {
             animationController.SetTrigger("Hit");
-
+            PlaySound("hit");
             for (float i = 0; i < invulTime;)
             {
 
@@ -231,6 +260,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /* Método IsPlayerDie */
     private IEnumerator IsPlayerDie()
     {
         if(life <= 0)
@@ -238,11 +268,16 @@ public class PlayerController : MonoBehaviour
             //TODO: Sacar menu de reinicio
             animationController.SetTrigger("Hit");
             StopParticleSystem();
+            //Animación cuando el player muere
             animationController.SetTrigger("Die");
-            yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.1f);
+            yield return new WaitForSeconds(animationController.GetCurrentAnimatorStateInfo(0).length * 1.75f);
+            //Sistema de particulas cuando el player muere
+            Instantiate(particleSystemDead,tr.position,Quaternion.identity);
+            //El player desaparece de la escena
             GameManager.Instance.UnsubsCribeObject(gameObject);
-            //Si la vida llega a 0 reiniciamos la escena/juego
-            GameManager.Instance.Invoke("RestartScene", 3f);
+            GameManager.Instance.PlaySound("gameover");
+            //Si la vida llega a 0 salta el panel de Game Over
+            GameManager.Instance.Invoke("ActiveGameoverPanel", 1f);
         }
     }
 
@@ -271,13 +306,18 @@ public class PlayerController : MonoBehaviour
     /* Método PlayerWin */
     public void PlayerWin()
     {
-        //TODO: definir condiciones para la victoria del player y gestionar el cambio de escena
         if((life>0) && (PlayerHasKey))
         {
-            Debug.Log("El Player ha ganado");
-            return;
+            //Si la vida llega a 0 salta el panel de Game Win
+            PlaySound("win");
+            playerWin = true;
+            GameManager.Instance.Invoke("ActiveGameWinPanel", 1f);
         }
-        Debug.Log("El Player AUN NO ha ganado");
+        else
+        {
+            GameManager.Instance.ActiveAlertPanel(true);
+        }
+        
     }
 
     /* Método PlaySounds */
@@ -286,16 +326,25 @@ public class PlayerController : MonoBehaviour
         switch(sound)
         {
             case "fruit":
-                audioSourcePlayer.PlayOneShot(CollectSound);
+                audioSourcePlayer.PlayOneShot(collectSound);
             break;
             case "jump":
                 audioSourcePlayer.PlayOneShot(jumpSound);
                 break;
             case "key":
-                audioSourcePlayer.PlayOneShot(CollectSound); 
+                audioSourcePlayer.PlayOneShot(keySound); 
                 break;
             case "life":
-                audioSourcePlayer.PlayOneShot(CollectSound);
+                audioSourcePlayer.PlayOneShot(lifeSound);
+                break;
+            case "hit":
+                audioSourcePlayer.PlayOneShot(onHitSound);
+                break;
+            case "hitenemy":
+                audioSourcePlayer.PlayOneShot(onHitEnemySound);
+                break;
+            case "win":
+                audioSourcePlayer.PlayOneShot(winSound);
                 break;
         }
     }
@@ -305,6 +354,7 @@ public class PlayerController : MonoBehaviour
     {
         RemoveLife(life);
         StartCoroutine(PlayerGotHit(point));
+        StartCoroutine(IsPlayerDie());
     }
 
     /* Getters y Setters*/
@@ -320,4 +370,5 @@ public class PlayerController : MonoBehaviour
         set => playerHasKey = value;
     }
     public int Life { get => life; }
+    public bool IsPlayerWinner { get => playerWin; }
 }

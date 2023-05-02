@@ -8,6 +8,7 @@ public class CofreController : MonoBehaviour
     private int points;
     private Animator anim;
     private SpriteRenderer SpriteRenderer;
+    private AudioSource audioSource;
     private int InitialOrderInlayer;
     private int backOrderInlayer;
     private bool isOpened;
@@ -19,6 +20,7 @@ public class CofreController : MonoBehaviour
         points = 100;
         anim = GetComponent<Animator>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         InitialOrderInlayer = 5;
         backOrderInlayer = InitialOrderInlayer - 1;
         isOpened = false;
@@ -36,6 +38,7 @@ public class CofreController : MonoBehaviour
         {
             if((other.GetComponent<PlayerController>().PlayerHasKey) && (!isOpened))
             {
+                audioSource.Play();
                 other.GetComponent<PlayerController>().AddPoints(points);
                 anim.SetTrigger("Open");
                 isOpened = true;
