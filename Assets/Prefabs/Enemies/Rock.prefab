@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7854296ba5c151b42a684dbfc6dd16da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 2
+  life: 3
   points: 25
   speed: 0.46
   partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}

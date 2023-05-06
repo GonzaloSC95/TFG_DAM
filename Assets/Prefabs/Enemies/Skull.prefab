@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life: 5
   points: 50
-  speed: 0.6
+  speed: 0.9
   partycleSystemDead: {fileID: 6825737271757122184, guid: e263be281764d6a4690149dbb93428bb, type: 3}
   partycleSystemRun: {fileID: 9093613162813700491}
   canFly: 0
