@@ -29,17 +29,17 @@ public class CanvasController : MonoBehaviour
     {
         switch(sceneName)
         {
-            case "Nivel1":
+            case "Nivel_1":
                 SceneManager.LoadScene("Nivel_2");
                 break;
-            case "Nivel2":
+            case "Nivel_2":
                 SceneManager.LoadScene("Nivel_3");
                 break;
-            case "Nivel3":
+            case "Nivel_3":
                 SceneManager.LoadScene("Menu");
                 break;
             default:
-                SceneManager.LoadScene("Nivel_1");
+                SceneManager.LoadScene("Menu");
                 break;
         }
     }
