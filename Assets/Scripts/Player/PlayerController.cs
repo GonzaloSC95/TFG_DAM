@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     //About life
     private static bool invulnerable;
     private static float invulTime = 2;
-    private int life = 2;
+    private int life = 3;
     //About Points
     private int points = 0;
     // About Cofre key
