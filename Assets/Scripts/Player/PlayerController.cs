@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     //About life
     private static bool invulnerable;
     private static float invulTime = 2;
-    private int life = 3;
+    private int life;
     //About Points
     private int points = 0;
     // About Cofre key
@@ -52,11 +52,19 @@ public class PlayerController : MonoBehaviour
         //Obtenemos el componente Transform del player
         tr = transform;
         //Obtenemos el componente Rigidbody2D del player
-        rb = this.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         //Obtenemos el componente SpriteRenderer del player
-        rend = this.GetComponent<SpriteRenderer>();
+        rend = GetComponent<SpriteRenderer>();
         //Obtenemos el componente AudioSource del player
-        audioSourcePlayer = GetComponent<AudioSource>();  
+        audioSourcePlayer = GetComponent<AudioSource>();
+        //Obtenemos los datos de la sesion
+        Partida partida = SessionManager.Instance.Db.GetLastPartida(SessionManager.Instance.User.Id);
+        if(partida != null)
+        {
+            life = (partida.Life <= 0) ? 1 : partida.Life;
+            points = partida.Points;
+        }
+        
     }
 
     /* Método Start*/
@@ -65,6 +73,7 @@ public class PlayerController : MonoBehaviour
         ChangeState(PlayerStatesEnum.PlayerGrounded);
         //Pintamos la vida actual del player
         GameManager.Instance.LifePlayerText = life.ToString();
+        GameManager.Instance.PointsPlayerText = "POINTS: " + points.ToString("D3");
     }
 
     /* Método Update */
@@ -277,7 +286,9 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.UnsubsCribeObject(gameObject);
             GameManager.Instance.PlaySound("gameover");
             //Si la vida llega a 0 salta el panel de Game Over
+            points = 0;
             GameManager.Instance.Invoke("ActiveGameoverPanel", 1f);
+            
         }
     }
 
@@ -369,6 +380,15 @@ public class PlayerController : MonoBehaviour
         get => playerHasKey;
         set => playerHasKey = value;
     }
-    public int Life { get => life; }
+    public int Life 
+    { 
+        get => life; 
+        set => life = value; 
+    }
+    public int Points
+    {
+        get => points;
+        set => points = value;
+    }
     public bool IsPlayerWinner { get => playerWin; }
 }

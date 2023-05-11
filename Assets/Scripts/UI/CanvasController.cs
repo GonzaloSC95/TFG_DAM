@@ -5,12 +5,14 @@ public class CanvasController : MonoBehaviour
 {
     /* Atributos */
     private string sceneName;
+    private Usuario user;
 
     /* Métodos */
     /* Método RestartScene */
     private void Start()
     {
         sceneName = GetCurrentSceneName();
+        user = SessionManager.Instance.User;
     }
     /* Método RestartScene */
     public void RestartScene()
@@ -21,28 +23,39 @@ public class CanvasController : MonoBehaviour
     /* Método ExitScene */
     public void ExitScene()
     {
-        SceneManager.LoadScene("Menu");
+        if(user != null)
+        {
+            UpdateLevel();
+            SceneManager.LoadScene("Menu");
+        }
     }
 
     /* Método LoadNextLevel */
     public void LoadNextScene()
     {
-        switch(sceneName)
+        if (user != null)
         {
-            case "Nivel_1":
-                SceneManager.LoadScene("Nivel_2");
-                break;
-            case "Nivel_2":
-                SceneManager.LoadScene("Nivel_3");
-                break;
-            case "Nivel_3":
-                SceneManager.LoadScene("Menu");
-                break;
-            default:
-                SceneManager.LoadScene("Menu");
-                break;
+            UpdateLevel();
+        
+            switch (sceneName)
+            {
+                case "Nivel_1":
+                    SceneManager.LoadScene("Nivel_2");
+                    break;
+                case "Nivel_2":
+                    SceneManager.LoadScene("Nivel_3");
+                    break;
+                case "Nivel_3":
+                    SceneManager.LoadScene("Menu");
+                    break;
+                default:
+                    SceneManager.LoadScene("Menu");
+                    break;
+            }
         }
     }
+
+    /* Método GetCurrentSceneName */
     public string GetCurrentSceneName()
     {
         string sceneName = "";
@@ -51,5 +64,16 @@ public class CanvasController : MonoBehaviour
         if(currentScene != null) sceneName = currentScene.name;
         // Obtener el nombre de la escena activa
         return sceneName;
+    }
+
+    /* Método UpdateLevel */
+    public void UpdateLevel()
+    {
+        Partida level = SessionManager.Instance.Db.GetLastPartida(user.Id);
+        level.Level = sceneName;
+        level.Points = GameManager.Instance.PlayerController.Points;
+        level.Life = GameManager.Instance.PlayerController.Life;
+        level.Date = System.DateTime.Now;
+        SessionManager.Instance.Db.UpdatePartida(level);
     }
 }

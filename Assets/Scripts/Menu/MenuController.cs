@@ -20,6 +20,15 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Color GreenColor;
     private string patternEmail;
     private string patternPsw;
+    private string WrongFormtEmailMsg;
+    private string WrongFormtPasswordMsg;
+    private string EmptyFieldMsg;
+    private string WrongEmailOrPaswMsg;
+    private string UserAlreadyExistMsg;
+    //Usuario de BBDD
+    private Usuario User;
+    private Partida Level;
+
 
     /* Métodos */
     /* Método OpenNewGamePanel */
@@ -28,6 +37,12 @@ public class MenuController : MonoBehaviour
         //Patrones
         patternEmail = @"([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}";
         patternPsw = @"^(?=.*[A-Z])(?=.*\d).{10,}$";
+        //Mensajes
+        WrongFormtEmailMsg = "- Not valid Email.\n\n";
+        WrongFormtPasswordMsg = "- The password must contain at least 10 characters, one capital letter and one number.";
+        EmptyFieldMsg = "- You must fill in your email and password.";
+        WrongEmailOrPaswMsg = "- Wrong Email or Password. Maybe your user has not been created yet.";
+        UserAlreadyExistMsg = "- That user already exists. Try another email or log in.";
         //Eventos
         inputStartEmail.onValueChanged.AddListener(delegate { OnInputFieldValueChanged(inputStartEmail.text, inputStartEmail, "N"); });
         inputStartPwd.onValueChanged.AddListener(delegate { OnInputFieldValueChanged(inputStartPwd.text, inputStartPwd, "N"); });
@@ -47,11 +62,21 @@ public class MenuController : MonoBehaviour
             AlertImage.gameObject.SetActive(true);
             return;
         }
+        else if(!ValDatosInputDb("N"))
+        {
+            AlertImage.gameObject.SetActive(true);
+            return;
+        }
         else
         {
             AlertImage.gameObject.SetActive(false);
-            //TODO: Persistencia de datos
-            SceneManager.LoadScene("Nivel_1");
+            User = SessionManager.Instance.Db.CreateUsuario(inputStartEmail.text, inputStartPwd.text);
+            Level = SessionManager.Instance.Db.CreatePartida(User.Id, "Nivel_1", 0, 3, System.DateTime.Now);
+            if((User != null) && (Level != null))
+            {
+                SessionManager.Instance.User = User;
+                SceneManager.LoadScene(Level.Level);
+            }
         }
     }
     /* Método ValDatosInput */
@@ -64,25 +89,47 @@ public class MenuController : MonoBehaviour
 
         if((email.text == "") || (psw.text == ""))
         {
-            AlertText.text = "- You must fill in your email and password";
+            AlertText.text = EmptyFieldMsg;
             validation = false;
         }
         else
         {
             if (!Regex.IsMatch(email.text, patternEmail))
             {
-                AlertText.text += "- Not valid Email\n\n";
+                AlertText.text += WrongFormtEmailMsg;
                 ChangeInputColorNormal(email, RedColor);
                 validation = false;
             }
             if (!Regex.IsMatch(psw.text, patternPsw))
             {
-                AlertText.text += "- The password must contain at least one capital letter and one number.";
+                AlertText.text += WrongFormtPasswordMsg;
                 ChangeInputColorNormal(psw, RedColor);
                 validation = false;
             }
         }
         
+        return validation;
+    }
+    /* Método ValDatosInputDb */
+    public bool ValDatosInputDb(string panelType)
+    {
+        InputField email = (panelType == "N") ? inputStartEmail : inputLoadEmail;
+        InputField psw = (panelType == "N") ? inputStartPwd : inputLoadPwd;
+        User = SessionManager.Instance.Db.GetFirstUsuario(email.text);
+        bool validation = true;
+        AlertText.text = "";
+
+        if ((panelType == "N") && (User != null))
+        {
+            AlertText.text += UserAlreadyExistMsg;
+            validation = false;
+        }
+        if ((panelType == "L") && ((User == null) || User.Psw != psw.text))
+        {
+            AlertText.text += WrongEmailOrPaswMsg;
+            validation = false;
+        }
+
         return validation;
     }
     /* Método BackMainMenu */
@@ -113,11 +160,22 @@ public class MenuController : MonoBehaviour
             AlertImage.gameObject.SetActive(true);
             return;
         }
+        else if (!ValDatosInputDb("L"))
+        {
+            AlertImage.gameObject.SetActive(true);
+            return;
+        }
         else
         {
             AlertImage.gameObject.SetActive(false);
-            //TODO: Recuperacion de datos
-            //SceneManager.LoadScene(currentLoadScene);
+            //Recuperacion de datos y carga de la escena
+            Level = SessionManager.Instance.Db.GetLastPartida(User.Id);
+            if ((User != null) && (Level != null))
+            {
+                SessionManager.Instance.User = User;
+                SceneManager.LoadScene(Level.Level);
+            }
+
         }
     }
     /* Método ChangeInputColorNormal */
@@ -165,7 +223,7 @@ public class MenuController : MonoBehaviour
 
         if ((!Regex.IsMatch(email.text, patternEmail)) && (email.text != ""))
         {
-            AlertText.text += "- Not valid Email\n\n";
+            AlertText.text += WrongFormtEmailMsg;
             ChangeInputColorNormal(email, RedColor);
             validation = false;
         }
@@ -175,7 +233,7 @@ public class MenuController : MonoBehaviour
         }
         if (!Regex.IsMatch(psw.text, patternPsw) && (psw.text != ""))
         {
-            AlertText.text += "- The password must contain at least one capital letter and one number.";
+            AlertText.text += WrongFormtPasswordMsg;
             ChangeInputColorNormal(psw, RedColor);
             validation = false;
         }
