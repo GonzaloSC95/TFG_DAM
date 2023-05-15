@@ -58,13 +58,21 @@ public class PlayerController : MonoBehaviour
         //Obtenemos el componente AudioSource del player
         audioSourcePlayer = GetComponent<AudioSource>();
         //Obtenemos los datos de la sesion
-        Partida partida = SessionManager.Instance.Db.GetLastPartida(SessionManager.Instance.User.Id);
-        if(partida != null)
+        try
         {
-            life = (partida.Life <= 0) ? 1 : partida.Life;
-            points = partida.Points;
+            Partida partida = SessionManager.Instance.Db.GetLastPartida(SessionManager.Instance.User.Id);
+            if (partida != null)
+            {
+                life = (partida.Life <= 0) ? 1 : partida.Life;
+                points = partida.Points;
+            }
         }
-        
+        catch(Exception e)
+        {
+            life = 3;
+            points = 0;
+            Debug.LogError("SessionManager.Instance = null -- " + e.Message);
+        }  
     }
 
     /* Método Start*/

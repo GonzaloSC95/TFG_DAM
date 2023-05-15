@@ -241,4 +241,8 @@ public class DataService  {
 		var lambda = Expression.Lambda<Func<Usuario, object>>(Expression.Convert(property, typeof(object)), parameter);
 		return lambda;
 	}
+
+	/* Getters */
+	public TableMapping TableUsuarios { get => _connection.GetMapping(typeof(Usuario));}
+	public TableMapping TablePartidas { get => _connection.GetMapping(typeof(Partida));}
 }

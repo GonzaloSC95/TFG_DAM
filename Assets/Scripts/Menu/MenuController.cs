@@ -253,4 +253,9 @@ public class MenuController : MonoBehaviour
         inputStartPwd.text = "";
         AlertText.text = "";
     }
+    /* Método ExitApplication */
+    public void ExitApplication()
+    {
+        Application.Quit();
+    }
 }

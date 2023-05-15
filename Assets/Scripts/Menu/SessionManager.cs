@@ -28,8 +28,18 @@ public class SessionManager : MonoBehaviour
         }
         //Inicializamos los componentes
         InicializarComponentes();
-        db.CreateDataBase();
+        StartCoroutine(CreateDatabase());
         DontDestroyOnLoad(instance);
+    }
+
+    /* Método CreateDatabase */
+    private IEnumerator CreateDatabase()
+    {
+        if((db.TablePartidas != null) && (db.TableUsuarios != null))
+        {
+            db.CreateDataBase();
+            yield return new WaitUntil(() => ((db.TableUsuarios != null) && (db.TablePartidas != null)));
+        }
     }
 
     /* Getters */

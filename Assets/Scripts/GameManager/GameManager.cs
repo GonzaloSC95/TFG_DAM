@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        Debug.Log("GameManager is Operative--->" + instance);
         //Inicializamos los componentes
         InicializarComponentes();
     }
