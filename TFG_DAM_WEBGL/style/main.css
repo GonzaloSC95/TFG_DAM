@@ -1,0 +1,182 @@
+/* FUENTES */
+@font-face {
+  font-family: munstar;
+  src: url(../fonts/munstar/Munstar-Regular.ttf);
+}
+@font-face {
+  font-family: extrasales;
+  src: url(../fonts/extra_sales/Extra_Sales_Blank.ttf);
+}
+@font-face {
+  font-family: splatch;
+  src: url(../fonts/splatch/Splatch.ttf);
+}
+@font-face {
+  font-family: logo;
+  src: url(../fonts/logos/social_media.ttf);
+}
+
+a {
+  font-family: splatch;
+  text-decoration: none;
+  font-size: xx-large;
+}
+
+a span {
+  font-family: logo;
+  font-size: 55px;
+}
+
+#container {
+  margin: 0;
+  padding: 0;
+  background-color: #ffff;
+  grid-template-areas:
+    'header'
+    'informacion'
+    'imagenes'
+    'game'
+    'download'
+    'footer';
+}
+
+/* CABECERA */
+header {
+  width: 100%;
+  height: 100px;
+  background-color: #333;
+  display: grid;
+}
+
+header h1 {
+  text-align: center;
+  line-height: 100px;
+}
+
+header h1 a {
+  font-family: munstar, Arial, Helvetica, sans-serif !important;
+  font-size: 65px !important;
+  color: #1ebc73;
+}
+
+/* GENERAL */
+#container,
+#header,
+#informacion,
+#imagenes,
+#game,
+#download,
+#footer {
+  width: 100% !important;
+  height: auto !important;
+}
+#imagenes,
+#informacion,
+#game {
+  padding: 25px;
+  border-bottom: 1px solid #dddd;
+}
+
+/* BLOQUE DE INFORMACION DEL JUEGO */
+#informacion {
+  display: grid;
+  grid-template-areas: 'jugabilidadtxt nivelestxt enemigostxt';
+  column-gap: 25px;
+}
+
+#informacion h3 {
+  font-family: extrasales, Arial, Helvetica, sans-serif;
+  color: #1ebc73;
+  margin-bottom: 25px;
+}
+#informacion p,
+#informacion li {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: justify;
+  font-size: medium;
+}
+
+#informacion #jugabilidadtxt,
+#informacion #nivelestxt,
+#informacion #enemigostxt {
+  width: 600px;
+  margin: 0 auto;
+}
+
+/* BLOQUE DE IMAGENES DEL JUEGO */
+#imagenes {
+  display: grid;
+  grid-template-areas: 'jugabilidadimg nivelesimg enemigosimg';
+}
+
+#imagenes #jugabilidadimg,
+#imagenes #nivelesimg,
+#imagenes #enemigosimg {
+  width: 600px;
+  margin: 0 auto;
+}
+
+/* BLOQUE DEMO DEL JUEGO */
+#game {
+  display: block;
+  text-align: center;
+  font-family: extrasales, Arial, Helvetica, sans-serif;
+  color: #1ebc73;
+}
+
+#game iframe {
+  width: 100%;
+  height: 650px;
+  display: block;
+}
+
+/* BLOQUE DESCARGA DEL JUEGO */
+#download {
+  width: 100%;
+
+  text-align: center;
+  font-family: extrasales, Arial, Helvetica, sans-serif;
+  color: #1ebc73;
+}
+
+#download #buttons {
+  width: 100%;
+  display: grid;
+  grid-template-areas: 'android windows';
+}
+
+.button-container-green {
+  width: 35%;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #1ebc73;
+  border-radius: 100px;
+}
+
+.button-container-green a {
+  color: #1ebc73;
+}
+
+.button-container-blue {
+  width: 35%;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #1e62bc;
+  border-radius: 100px;
+}
+
+.button-container-blue a {
+  color: #1e62bc;
+}
+
+/* FOOTER */
+footer {
+  width: 100%;
+  height: 70px !important;
+  background-color: #333;
+  font-family: munstar;
+  font-size: 25px;
+  color: #1ebc73;
+  text-align: center;
+  line-height: 70px;
+}
