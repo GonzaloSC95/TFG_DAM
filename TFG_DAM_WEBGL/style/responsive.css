@@ -1,5 +1,5 @@
-/* 1820 */
-@media screen and (max-width: 1820px) {
+/* 1900 */
+@media screen and (max-width: 1900px) {
   #informacion {
     margin-top: 0px !important;
     display: grid;
@@ -52,8 +52,8 @@
     font-size: 20px !important;
   }
 }
-/* 1520px */
-@media screen and (max-width: 1520px) {
+/* 1566px */
+@media screen and (max-width: 1566px) {
   #imagenes #jugabilidadimg,
   #imagenes #nivelesimg,
   #imagenes #enemigosimg {
@@ -61,7 +61,7 @@
   }
 }
 /* 1420px */
-@media screen and (max-width: 1420px) {
+@media screen and (max-width: 1466px) {
   #imagenes #jugabilidadimg,
   #imagenes #nivelesimg,
   #imagenes #enemigosimg {
@@ -69,7 +69,7 @@
   }
 }
 /* 1320px */
-@media screen and (max-width: 1320px) {
+@media screen and (max-width: 1366px) {
   #imagenes #jugabilidadimg,
   #imagenes #nivelesimg,
   #imagenes #enemigosimg {
@@ -77,7 +77,7 @@
   }
 }
 /*  1280px */
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1290px) {
   #informacion {
     margin-top: 0px !important;
     display: grid;
@@ -167,8 +167,8 @@
     margin: 0 auto;
   }
 }
-/*  1024px */
-@media screen and (max-width: 1024px) {
+/*  1030px */
+@media screen and (max-width: 1030px) {
   #informacion #jugabilidadtxt,
   #informacion #nivelestxt {
     width: 400px;
@@ -189,8 +189,8 @@
     margin: 0 auto;
   }
 }
-/*  970px */
-@media screen and (max-width: 970px) {
+/*  1000px */
+@media screen and (max-width: 1000px) {
   #informacion #jugabilidadtxt,
   #informacion #nivelestxt {
     width: 400px;
