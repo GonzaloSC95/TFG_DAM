@@ -28,8 +28,8 @@ https://gonzalosc95.github.io/DESSERT_PIXEL/
 * Menu: Assets/Animation/UI
 
 # Música
-* Banda Sónora: Assets/Sounds/PlayOneTime
-* Efectos de sonido: Assets/Sounds/SoundTracks
+* Banda Sónora: Assets/Sounds/SoundTracks
+* Efectos de sonido: Assets/Sounds/PlayOneTime
 
 # Sprites
 * Fondos: Assets/Sprites/BackGrounds
