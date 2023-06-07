@@ -1,5 +1,5 @@
 # Dessert Pixel 
-Es un videojuego de plataformas en 2D que consta de tres niveles, cada uno con una dificultad difrente. En esta aventura, el jugador deberá intentar conseguir toda la fruta y los tesoros que se encuentran repartidos por cada nivel, superando los diferentes obstaculos y derrotando a los distintos enemigos para poder superar todos los niveles.
+Es un videojuego de plataformas en 2D que consta de tres niveles, cada uno con una dificultad diferente. En esta aventura, el jugador deberá intentar conseguir toda la fruta y los tesoros que se encuentran repartidos por cada nivel, superando los diferentes obstaculos y derrotando a los distintos enemigos para poder superar todos los niveles.
 
 # Sitio Web
 https://gonzalosc95.github.io/DESSERT_PIXEL/
